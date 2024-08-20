@@ -21,5 +21,6 @@ class AddCategoryIdToEventsTable extends Migration
       $table->dropForeign(['category_id']);
       $table->dropColumn('category_id');
     });
+    // hello
   }
 };
