@@ -19,10 +19,11 @@ Route::get('/', function () {
   return view('welcome');
 })->name('home');
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+Route::delete('/admin/user/delete/{id}', [UserController::class, 'destroy'])->name('user.destroy');
 
 // web.php
 Route::get('/admin/event/all', [AdminController::class, 'allEvent'])->name('event.all');
-Route::get('/admin/events', [EventController::class, 'index'])->name('admin.events.index');
+Route::get('/admin/events', [EventController::class, 'index'])->name('admin.events.create');
 // Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
 // Event details route
@@ -30,13 +31,25 @@ Route::get('/event-details', function () {
   return view('eventDetails');
 })->name('eventDetails');
 
+// Activate user
+Route::patch('/admin/user/{id}/activate', [UserController::class, 'activate'])->name('admin.user.activate');
+
+// Deactivate user
+Route::patch('/admin/user/{id}/deactivate', [UserController::class, 'deactivate'])->name('admin.user.deactivate');
+
+// Delete user
+Route::delete('/admin/user/{id}', [UserController::class, 'destroy'])->name('admin.user.delete');
+Route::patch('/admin/user/{id}/status', [AdminController::class, 'updateStatus'])->name('admin.user.status');
+
+
+
 // In your web.php or routes file
 Route::get('/admin/event/all', [AdminController::class, 'allEvent'])->name('event.all');
 
 // Authentication routes
 require __DIR__ . '/auth.php';
 // Cleaned up routes
-Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:1', 'checkActive'])->group(function () {
   Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
   Route::get('/event/create', [EventController::class, 'create'])->name('admin.events.create');
@@ -56,7 +69,7 @@ Route::delete('/admin/category/{id}', [AdminController::class, 'deleteCategory']
 
 
 // Admin routes
-Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:1', 'checkActive'])->group(function () {
   Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
 
@@ -111,7 +124,7 @@ Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
 
 
 // Organizer routes
-Route::prefix('organizer')->middleware(['auth', 'role:2'])->group(function () {
+Route::prefix('organizer')->middleware(['auth', 'role:2', 'checkActive'])->group(function () {
   Route::get('dashboard', [OrganizerController::class, 'dashboard'])->name('organizer.dashboard');
   Route::get('events', [OrganizerController::class, 'events'])->name('organizer.events');
   Route::get('users', [OrganizerController::class, 'users'])->name('organizer.users');
@@ -122,7 +135,7 @@ Route::prefix('organizer')->middleware(['auth', 'role:2'])->group(function () {
 
 
 // User routes
-Route::prefix('user')->middleware(['auth', 'role:3'])->group(function () {
+Route::prefix('user')->middleware(['auth', 'role:3', 'checkActive'])->group(function () {
   Route::get('dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
 });
 

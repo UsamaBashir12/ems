@@ -12,16 +12,24 @@ return new class extends Migration
   public function up(): void
   {
     Schema::create('events', function (Blueprint $table) {
-      $table->id(); // id column (primary key)
-      $table->foreignId('user_id')->constrained()->onDelete('cascade'); // user_id column with a foreign key constraint
-      $table->enum('status', ['pending', 'confirmed', 'canceled']); // status column with enum values
-      $table->string('image')->nullable(); // image column (nullable)
-      $table->string('title'); // title column
-      $table->text('description'); // description column
-      $table->string('location'); // location column
-      $table->timestamp('start_time'); // start_time column
-      $table->timestamp('end_time'); // end_time column
-      $table->timestamps(); // created_at and updated_at columns
+      $table->id();
+      $table->string('title');
+      $table->string('slug')->unique();
+      $table->text('description');
+      $table->unsignedBigInteger('category_id');
+      $table->date('start_date');
+      $table->time('start_time');
+      $table->date('end_date');
+      $table->time('end_time');
+      $table->string('address');
+      $table->string('city');
+      $table->string('state');
+      $table->string('zip_code');
+      $table->integer('seats_available');
+      $table->boolean('status');
+      $table->string('image')->nullable();
+      $table->json('gallery')->nullable();
+      $table->timestamps();
     });
   }
 

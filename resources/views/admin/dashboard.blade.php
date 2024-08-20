@@ -90,38 +90,42 @@
           <!-- Categories Table -->
           <div class="row my-4">
             <div class="col-12">
-                <h3 class="text-center my-3">Categories</h3>
-                <div class="table-responsive">
-                    <table class="table table-hover table-striped text-center">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($categories as $category)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $category->title }}</td>
-                                <td>
-                                    <a href="{{ route('admin.category.view', $category->id) }}" class="btn btn-sm btn-primary">View</a>
-                                    <a href="{{ route('admin.category.edit', $category->id) }}" class="btn btn-sm btn-success">Edit</a>
-                                    <form action="{{ route('admin.category.delete', $category->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+              <h3 class="text-center my-3">Categories</h3>
+              <div class="table-responsive">
+                <table class="table table-hover table-striped text-center">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($categories as $category)
+                      <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $category->title }}</td>
+                        <td>
+                          <a href="{{ route('admin.category.view', $category->id) }}"
+                            class="btn btn-sm btn-primary">View</a>
+                          <a href="{{ route('admin.category.edit', $category->id) }}"
+                            class="btn btn-sm btn-success">Edit</a>
+                          <form action="{{ route('admin.user.status', $user->id) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <input type="hidden" name="is_active" value="1"> <!-- or 0 for inactive -->
+                            <button type="submit">Activate</button>
+                          </form>
+
+                        </td>
+                      </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
             </div>
-        </div>
-        
+          </div>
+
         </div>
       </div>
     </main>

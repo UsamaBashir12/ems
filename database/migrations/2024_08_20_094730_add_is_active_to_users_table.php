@@ -6,17 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+  /**
+   * Run the migrations.
+   */
   public function up()
   {
-    Schema::table('events', function (Blueprint $table) {
-      $table->string('slug')->unique()->after('title'); // Adjust the column type and position as needed
+    Schema::table('users', function (Blueprint $table) {
+      $table->boolean('is_active')->default(true);
     });
   }
 
   public function down()
   {
-    Schema::table('events', function (Blueprint $table) {
-      $table->dropColumn('slug');
+    Schema::table('users', function (Blueprint $table) {
+      $table->dropColumn('is_active');
     });
   }
 };

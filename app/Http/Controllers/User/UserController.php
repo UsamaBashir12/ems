@@ -8,9 +8,48 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+  public function activate(Request $request, $id)
+  {
+    $user = User::find($id);
+    if ($user) {
+      $user->is_active = true;
+      $user->save();
+      return response()->json(['message' => 'User activated successfully']);
+    } else {
+      return response()->json(['message' => 'User not found'], 404);
+    }
+  }
+
+  public function deactivate(Request $request, $id)
+  {
+    $user = User::find($id);
+    if ($user) {
+      $user->is_active = false;
+      $user->save();
+      return response()->json(['message' => 'User deactivated successfully']);
+    } else {
+      return response()->json(['message' => 'User not found'], 404);
+    }
+  }
+
+
   public function dashboard()
   {
     return view('admin.dashboard'); // Ensure this view file exists
+  }
+
+  public function updateStatus(Request $request, $id)
+  {
+    $user = User::find($id);
+
+    if (!$user) {
+      return redirect()->route('admin.dashboard')->with('error', 'User not found!');
+    }
+
+    $user->is_active = $request->input('is_active'); // Ensure this field is correctly handled
+    $user->save();
+
+    return redirect()->route('admin.dashboard')->with('success', 'User status updated successfully!');
   }
 
   public function add()

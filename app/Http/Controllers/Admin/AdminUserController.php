@@ -18,7 +18,10 @@ class AdminUserController extends Controller
   {
     return view('admin.dashboard');
   }
-
+  public function view($id)
+  {
+    // Your logic here
+  }
   /**
    * Show all users.
    *

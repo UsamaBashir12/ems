@@ -17,6 +17,16 @@ class LoginController extends Controller
    */
   protected function authenticated(Request $request, $user)
   {
+    // Check if the user is active
+    if (!$user->is_active) {
+      // Log out the user if they are inactive
+      Auth::logout();
+
+      // Redirect to the login page with an error message
+      return redirect('/login')->with('error', 'You are blocked and inactive by the admin.');
+    }
+
+    // Redirect based on the user's role
     switch ($user->role_id) {
       case 1:
         return redirect()->route('admin.dashboard');
@@ -25,7 +35,23 @@ class LoginController extends Controller
       case 3:
         return redirect()->route('user.dashboard'); // Adjust as needed
       default:
-        return redirect('/home'); // Default redirection
+        return redirect('/home'); // Default redirection for other roles
     }
+  }
+  protected function sendFailedLoginResponse(Request $request)
+  {
+    $user = \App\Models\User::where('email', $request->input('email'))->first();
+
+    if ($user && !$user->is_active) {
+      // If the user is deactivated, show a custom error message
+      return redirect()->back()
+        ->withInput($request->only('email', 'remember'))
+        ->withErrors(['email' => 'Your account has been deactivated. Please contact support.']);
+    }
+
+    // Default error message
+    return redirect()->back()
+      ->withInput($request->only('email', 'remember'))
+      ->withErrors(['email' => trans('auth.failed')]);
   }
 }
