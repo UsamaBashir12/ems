@@ -1,0 +1,22 @@
+/* banner styling */
+
+.banner-img-setting {
+    height: 496px !important;
+}
+.banner-img-setting img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+/* cards section styling */
+.card-header-style img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.card-header-style .card-header {
+    height: 200px;
+}
+.profile-design{
+  width: 50px;
+}

@@ -1,0 +1,27 @@
+body {
+    overflow: hidden;
+}
+
+#content-area {
+    overflow-y: auto;
+    height: 540px;
+}
+
+.left-sidebar {
+    height: 700px;
+    overflow-y: scroll !important;
+}
+.btn-primary {
+    background: black !important;
+    border: 0;
+    border-radius: 0px;
+}
+.btn-primary:hover {
+    background: tomato !important;
+}
+.btn-primary,
+.btn-danger,
+.btn-info,
+.btn-success {
+    border-radius: 0;
+}
