@@ -1,6 +1,5 @@
 <!-- resources/views/admin/event/categories.blade.php -->
 <x-app-layout>
-  </style>
   <div class="row">
     <!-- Left Sidebar -->
     @include('admin.partials.sidebar')
@@ -15,10 +14,6 @@
             <div class="form-group">
               <label for="title">Title</label>
               <input type="text" id="title" name="title" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label for="slug">Slug</label>
-              <input type="text" id="slug" name="slug" class="form-control" required>
             </div>
             <div class="form-group">
               <label for="description">Description</label>
@@ -51,14 +46,5 @@
         </div>
       </div>
     </main>
-
   </div>
-
-  <!-- Custom JS to handle link clicks -->
-</x-app-layout>
-
-
-<x-app-layout>
-
-
 </x-app-layout>

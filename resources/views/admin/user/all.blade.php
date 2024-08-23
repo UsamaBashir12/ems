@@ -37,9 +37,9 @@
                           <td>{{ $user->first_name }}</td>
                           <td>
                             @if ($user->is_active)
-                              <span class="badge badge-success">Active</span>
+                              <span class="btn btn-success btn-sm">Active</span>
                             @else
-                              <span class="badge badge-danger">Inactive</span>
+                              <span class="btn btn-danger btn-sm">Inactive</span>
                             @endif
                           </td>
                           <td>

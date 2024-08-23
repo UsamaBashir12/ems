@@ -1,10 +1,12 @@
 <x-app-layout>
+  <style>
+    /* Add any custom styles here */
   </style>
   <div class="row">
     <!-- Left Sidebar -->
     @include('admin.partials.sidebar')
 
-    <!-- Right Sidebar -->
+    <!-- Main Content Area -->
     <main class="col-md-9 p-3" id="content-area">
       <div id="dashboard-content" class="content-pane">
         <!-- Dashboard Cards -->
@@ -52,6 +54,7 @@
             </div>
           </div>
         </div>
+
         <!-- Upcoming Events Table -->
         <div class="container-fluid">
           <div class="row my-4">
@@ -69,10 +72,11 @@
                     </tr>
                   </thead>
                   <tbody>
+                    <!-- Example Data Row -->
                     <tr>
                       <td>1</td>
-                      <td>Usama</td>
-                      <td>Old</td>
+                      <td>Event Name</td>
+                      <td>Organizer Name</td>
                       <td>Active</td>
                       <td>
                         <a href="#" class="btn btn-sm btn-primary">View</a>
@@ -87,7 +91,6 @@
             </div>
           </div>
 
-          <!-- Categories Table -->
           <div class="row my-4">
             <div class="col-12">
               <h3 class="text-center my-3">Categories</h3>
@@ -103,20 +106,13 @@
                   <tbody>
                     @foreach ($categories as $category)
                       <tr>
-                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $category->id }}</td>
                         <td>{{ $category->title }}</td>
                         <td>
                           <a href="{{ route('admin.category.view', $category->id) }}"
                             class="btn btn-sm btn-primary">View</a>
                           <a href="{{ route('admin.category.edit', $category->id) }}"
                             class="btn btn-sm btn-success">Edit</a>
-                          <form action="{{ route('admin.user.status', $user->id) }}" method="POST">
-                            @csrf
-                            @method('PATCH')
-                            <input type="hidden" name="is_active" value="1"> <!-- or 0 for inactive -->
-                            <button type="submit">Activate</button>
-                          </form>
-
                         </td>
                       </tr>
                     @endforeach
@@ -129,8 +125,5 @@
         </div>
       </div>
     </main>
-
   </div>
-
-  <!-- Custom JS to handle link clicks -->
 </x-app-layout>
