@@ -5,6 +5,9 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\User; // Import the User model
 use Illuminate\Http\Request;
+use App\Models\Event;
+use App\Models\Category;
+
 
 class UserController extends Controller
 {
@@ -19,6 +22,17 @@ class UserController extends Controller
       return response()->json(['message' => 'User not found'], 404);
     }
   }
+  public function destroy(Request $request, $id)
+  {
+    $user = User::find($id);
+    if ($user) {
+      $user->delete();
+      return redirect()->back()->with('success', 'User deleted successfully');
+    } else {
+      return redirect()->back()->with('error', 'User not found');
+    }
+  }
+
 
   public function deactivate(Request $request, $id)
   {
@@ -32,11 +46,27 @@ class UserController extends Controller
     }
   }
 
+  public function view($id)
+  {
+    $user = User::find($id);
+
+    if (!$user) {
+      // Handle the case where the user is not found
+      abort(404, 'User not found');
+    }
+
+    return view('admin.user.view', ['user' => $user]);
+  }
 
   public function dashboard()
   {
-    return view('admin.dashboard'); // Ensure this view file exists
+    // Assuming you need to get event and category counts from your models or database
+    $eventCount = Event::count(); // Replace with your actual method to get event count
+    $categoryCount = Category::count(); // Replace with your actual method to get category count
+
+    return view('user.dashboard', compact('eventCount', 'categoryCount'));
   }
+
 
   public function updateStatus(Request $request, $id)
   {

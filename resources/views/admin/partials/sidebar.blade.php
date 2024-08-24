@@ -58,9 +58,9 @@
           <li class="nav-item">
             <a class="nav-link" href="{{ route('admin.user.organizers') }}">Organizers</a>
           </li>
-          <li class="nav-item">
+          {{-- <li class="nav-item">
             <a class="nav-link" href="#">Customers</a>
-          </li>
+          </li> --}}
         </ul>
       </div>
     </li>

@@ -1,5 +1,3 @@
-<!-- resources/views/admin/user/view.blade.php -->
-
 @extends('layouts.layout')
 
 @section('content')
@@ -10,7 +8,7 @@
       <div class="card-body">
         <h5 class="card-title">{{ $user->name }}</h5>
         <p class="card-text">Email: {{ $user->email }}</p>
-        <p class="card-text">Role: {{ $user->role }}</p>
+        <p class="card-text">Role_id: {{ $user->role_id }}</p>
         <!-- Add other user details as needed -->
       </div>
     </div>

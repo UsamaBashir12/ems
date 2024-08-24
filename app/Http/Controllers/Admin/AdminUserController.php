@@ -20,8 +20,13 @@ class AdminUserController extends Controller
   }
   public function view($id)
   {
-    // Your logic here
+      $user = User::find($id); // Fetch the user from the database
+      if (!$user) {
+          abort(404); // Handle the case where the user is not found
+      }
+      return view('admin.user.view', compact('user')); // Pass the user variable to the view
   }
+  
   /**
    * Show all users.
    *
@@ -81,6 +86,7 @@ class AdminUserController extends Controller
     $user = User::findOrFail($id);
     return view('admin.user.edit', compact('user'));
   }
+
 
   /**
    * Update the specified user.

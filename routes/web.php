@@ -12,6 +12,7 @@ use App\Http\Controllers\ProfileController;
 // use App\Http\Controllers\EventController;
 use App\Http\Controllers\Admin\EventController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\DashboardController;
 
 // Home route
@@ -41,6 +42,9 @@ Route::patch('/admin/user/{id}/deactivate', [UserController::class, 'deactivate'
 Route::delete('/admin/user/{id}', [UserController::class, 'destroy'])->name('admin.user.delete');
 Route::patch('/admin/user/{id}/status', [AdminController::class, 'updateStatus'])->name('admin.user.status');
 
+Route::get('/user/dashboard', [UserDashboardController::class, 'show'])->name('user.dashboard');
+
+
 
 
 // In your web.php or routes file
@@ -66,12 +70,14 @@ Route::get('/admin/category/{id}/edit', [AdminController::class, 'editCategory']
 Route::put('/admin/category/{id}', [AdminController::class, 'updateCategory'])->name('admin.category.update');
 Route::delete('/admin/category/{id}', [AdminController::class, 'deleteCategory'])->name('admin.category.delete');
 
+Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 
 // Admin routes
 Route::prefix('admin')->middleware(['auth', 'role:1', 'checkActive'])->group(function () {
   Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
+  Route::get('user/view/{id}', [AdminUserController::class, 'view'])->name('admin.user.view');
 
 
   Route::get('/admin/event/categories', [AdminController::class, 'categories'])->name('admin.category.form');
