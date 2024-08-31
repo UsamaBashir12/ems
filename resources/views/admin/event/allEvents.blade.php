@@ -46,6 +46,53 @@
     .main-content {
       padding: 1rem;
     }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      .table thead {
+        display: block;
+        position: absolute;
+        width: 100%;
+        top: 0;
+        left: 0;
+      }
+
+      .table tbody {
+        display: block;
+        overflow-y: auto;
+        height: 400px;
+        /* Adjust height as needed */
+        width: 100%;
+        position: relative;
+      }
+
+      .table td,
+      .table th {
+        display: block;
+        text-align: right;
+      }
+
+      .table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      .table th {
+        text-align: center;
+        background-color: #f8f9fa;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+      }
+    }
   </style>
 
   <div class="container-fluid">
@@ -54,9 +101,9 @@
       @include('admin.partials.sidebar')
 
       <!-- Main Content Area -->
-      <main class="col-md-9 p-3">
-        <div id="add-event-content" class="content-pane">
-          <div class="card">
+      <main class="col-md-9" style="overflow-y:scroll;height:500px;">
+        <div id="add-event-content" class="content-pane" >
+          <div class="card" style="overflow: scroll">
             <div class="card-header">
               <h3 class="m-0">Manage Events</h3>
             </div>
@@ -82,7 +129,7 @@
                       <td>{{ \Carbon\Carbon::parse($event->start_date)->format('d-m-Y') }}</td>
                       <td>{{ \Carbon\Carbon::parse($event->end_date)->format('d-m-Y') }}</td>
                       <td>{{ $event->address }}</td>
-                      <td>{{ $event->organizer }}</td>
+                      {{-- <td>{{ $event->organizer }}</td> --}}
                     </tr>
                   @endforeach
                 </tbody>
@@ -91,6 +138,7 @@
           </div>
         </div>
       </main>
+      <br><br><br><br><br><br><br>
     </div>
   </div>
 

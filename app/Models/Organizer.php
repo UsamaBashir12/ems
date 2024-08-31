@@ -17,6 +17,10 @@ class Organizer extends Model
     'gender',
     'dob',
   ];
-
+  // Define the relationship with Event model
+  public function events()
+  {
+    return $this->hasMany(Event::class);
+  }
   // Optionally, you can define relationships here if needed
 }

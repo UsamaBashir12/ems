@@ -1,94 +1,84 @@
-@extends('layouts.organizer')
+<x-app-layout>
+  <style>
+    /* Add any custom styles here */
+  </style>
+  <div class="row">
+    <!-- Left Sidebar -->
+    @include('organizer.partials.sidebar')
 
-@section('title', 'Organizer Dashboard')
+    <!-- Main Content Area -->
+    <main class="col-md-9 p-3" id="content-area">
+      <div id="dashboard-content" class="content-pane">
+        <!-- Dashboard Cards -->
+        <div class="container my-4">
+          <div class="row g-4">
+            <!-- Events Card -->
+            <div class="col-lg-6 col-md-6 mb-4">
+              <div class="card shadow-lg border-0 rounded-lg h-100">
+                <div class="card-body text-center">
+                  <h4 class="card-title mb-3">Events</h4>
+                  <p class="display-4 text-primary mb-3">{{ $eventCount }}</p>
+                  <p class="text-muted">Number of events scheduled</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-@section('content')
+        <div class="container-fluid">
+          <div class="row my-4">
+            <div class="col-12">
+              <h3 class="text-center my-3">Your Upcoming Events</h3>
 
-  <div class="container mt-4">
-    <div class="row">
-      <!-- Sidebar -->
-      <div class="col-md-3">
-        <div class="list-group">
-          <a href="{{ route('organizer.dashboard') }}" class="list-group-item list-group-item-action active">
-            Dashboard
-          </a>
-          <a href="{{ route('organizer.events') }}" class="list-group-item list-group-item-action">
-            Manage Events
-          </a>
-          <a href="{{ route('organizer.users') }}" class="list-group-item list-group-item-action">
-            Manage Users
-          </a>
-          <a href="{{ route('organizer.settings') }}" class="list-group-item list-group-item-action">
-            Settings
-          </a>
+              @if ($events->isEmpty())
+                <p class="text-center">No upcoming events found.</p>
+              @else
+                <div class="table-responsive mb-4">
+                  <table class="table table-hover table-striped text-center">
+                    <thead class="thead-dark">
+                      @if (session('success'))
+                        <div class="alert alert-success">{{ session('success') }}</div>
+                      @endif
+
+                      @if (session('error'))
+                        <div class="alert alert-danger">{{ session('error') }}</div>
+                      @endif
+
+                      <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach ($events as $event)
+                        <tr>
+                          <td>{{ $event->id }}</td>
+                          <td>{{ $event->title }}</td>
+                          <td>{{ $event->status == 1 ? 'Active' : 'Inactive' }}</td>
+                          <td>
+                            <a href="{{ route('organizer.event.show', $event->id) }}"
+                              class="btn btn-sm btn-primary">View</a>
+                            <a href="{{ route('organizer.event.edit', $event->id) }}"
+                              class="btn btn-sm btn-success">Edit</a>
+                            <form action="{{ route('organizer.event.destroy', $event->id) }}" method="POST"
+                              style="display:inline;">
+                              @csrf
+                              @method('DELETE')
+                              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                          </td>
+                        </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
+              @endif
+            </div>
+          </div>
         </div>
       </div>
-
-      <!-- Main Content -->
-      <div class="col-md-9">
-        <h1 class="mb-4">Welcome, Organizer</h1>
-
-        <!-- Event Management Section -->
-        <div class="mb-4">
-          <h2>Upcoming Events</h2>
-          <div class="card">
-            <div class="card-header">
-              Upcoming Events
-            </div>
-            <div class="card-body">
-              <!-- Replace with dynamic event data -->
-              <ul class="list-group">
-                <li class="list-group-item">Event 1: Conference on Web Development</li>
-                <li class="list-group-item">Event 2: Seminar on Cybersecurity</li>
-                <!-- Add more events here -->
-              </ul>
-              <a href="{{ route('organizer.events') }}" class="btn btn-primary mt-3">Manage Events</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- User Management Section -->
-        <div class="mb-4">
-          <h2>Users</h2>
-          <div class="card">
-            <div class="card-header">
-              User Management
-            </div>
-            <div class="card-body">
-              <!-- Replace with dynamic user data -->
-              <ul class="list-group">
-                <li class="list-group-item">User 1: John Doe</li>
-                <li class="list-group-item">User 2: Jane Smith</li>
-                <!-- Add more users here -->
-              </ul>
-              <a href="{{ route('organizer.users') }}" class="btn btn-primary mt-3">Manage Users</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Settings Section -->
-        <div class="mb-4">
-          <h2>Settings</h2>
-          <div class="card">
-            <div class="card-header">
-              App Settings
-            </div>
-            <div class="card-body">
-              <!-- Add settings options here -->
-              <p>Manage application settings here.</p>
-              <a href="{{ route('organizer.settings') }}" class="btn btn-primary mt-3">Go to Settings</a>
-            </div>
-          </div>
-        </div>
-        <!-- Logout Section -->
-        <div class="mb-4">
-          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: inline;">
-            @csrf
-            <button type="submit" class="btn btn-danger">Logout</button>
-          </form>
-        </div>
-      </div>
-    </div>
+    </main>
   </div>
-
-@endsection
+</x-app-layout>

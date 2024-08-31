@@ -48,13 +48,13 @@
 
                             @if ($user->is_active)
                               <!-- Deactivate User Button -->
-                              <button type="button" class="btn btn-sm btn-warning" 
+                              <button type="button" class="btn btn-sm btn-warning"
                                 onclick="deactivateUser({{ $user->id }})">
                                 Deactivate
                               </button>
                             @else
                               <!-- Activate User Button -->
-                              <button type="button" class="btn btn-sm btn-primary" 
+                              <button type="button" class="btn btn-sm btn-primary"
                                 onclick="activateUser({{ $user->id }})">
                                 Activate
                               </button>
@@ -85,44 +85,56 @@
   </div>
 
   <script>
-    function activateUser(userId) {
+    document.addEventListener('DOMContentLoaded', function() {
+      function activateUser(userId) {
         if (!confirm('Are you sure you want to activate this user?')) return;
 
         fetch(`/admin/user/${userId}/activate`, {
             method: 'PATCH',
             headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             }
-        })
-        .then(response => response.json())
-        .then(data => {
+          })
+          .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+          })
+          .then(data => {
             alert(data.message);
             location.reload(); // Reload the page to reflect changes
-        })
-        .catch(error => {
+          })
+          .catch(error => {
             console.error('Error:', error);
-        });
-    }
+          });
+      }
 
-    function deactivateUser(userId) {
+      function deactivateUser(userId) {
         if (!confirm('Are you sure you want to deactivate this user?')) return;
 
         fetch(`/admin/user/${userId}/deactivate`, {
             method: 'PATCH',
             headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             }
-        })
-        .then(response => response.json())
-        .then(data => {
+          })
+          .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+          })
+          .then(data => {
             alert(data.message);
             location.reload(); // Reload the page to reflect changes
-        })
-        .catch(error => {
+          })
+          .catch(error => {
             console.error('Error:', error);
-        });
-    }
+          });
+      }
+
+      window.activateUser = activateUser;
+      window.deactivateUser = deactivateUser;
+    });
   </script>
+
 </x-app-layout>

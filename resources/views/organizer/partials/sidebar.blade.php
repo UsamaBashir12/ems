@@ -2,7 +2,7 @@
 <nav class="col-md-3 bg-light p-3 left-sidebar shadow-sm" id="sidebar" style="height: 500px; overflow-y: auto;">
   <ul class="nav flex-column">
     <li class="nav-item">
-      <a class="nav-link" href="{{ route('admin.dashboard') }}">
+      <a class="nav-link" href="{{ route('organizer.dashboard') }}">
         <i class="bi bi-house-door"></i> Dashboard
       </a>
     </li>
@@ -14,19 +14,18 @@
       <div class="collapse" id="collapseEvents">
         <ul class="nav flex-column ms-3">
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.event.all') }}">All Events</a>
+            <a class="nav-link" href="{{ route('event.all') }}">All Events</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.event.add') }}">Add Event</a>
+            <a class="nav-link" href="{{ route('event.add') }}">Add Event</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('event.categories') }}">Categories</a>
+            {{-- <a class="nav-link" href="{{ route('event.categories') }}">Categories</a> --}}
           </li>
-
         </ul>
       </div>
     </li>
-    <li class="nav-item">
+    {{-- <li class="nav-item">
       <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapseBookings" role="button"
         aria-expanded="false" aria-controls="collapseBookings">
         <i class="bi bi-journal"></i> Manage Bookings
@@ -41,34 +40,7 @@
           </li>
         </ul>
       </div>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#collapseUsers" role="button"
-        aria-expanded="false" aria-controls="collapseUsers">
-        <i class="bi bi-people"></i> Manage Users
-      </a>
-      <div class="collapse" id="collapseUsers">
-        <ul class="nav flex-column ms-3">
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.user.all') }}">All Users</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.user.add') }}">Add Users</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.user.organizers') }}">Organizers</a>
-          </li>
-          {{-- <li class="nav-item">
-            <a class="nav-link" href="#">Customers</a>
-          </li> --}}
-        </ul>
-      </div>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('admin.appSettings') }}">
-        <i class="bi bi-gear"></i> App Settings
-      </a>
-    </li>
+    </li> --}}
   </ul>
 </nav>
 
