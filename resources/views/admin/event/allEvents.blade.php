@@ -102,7 +102,7 @@
 
       <!-- Main Content Area -->
       <main class="col-md-9" style="overflow-y:scroll;height:500px;">
-        <div id="add-event-content" class="content-pane" >
+        <div id="add-event-content" class="content-pane">
           <div class="card" style="overflow: scroll">
             <div class="card-header">
               <h3 class="m-0">Manage Events</h3>
@@ -130,6 +130,11 @@
                       <td>{{ \Carbon\Carbon::parse($event->end_date)->format('d-m-Y') }}</td>
                       <td>{{ $event->address }}</td>
                       {{-- <td>{{ $event->organizer }}</td> --}}
+                      <td>
+                        id:{{ $event->organizer->id }} - {{ $event->organizer->first_name }}
+                        {{ $event->organizer->last_name }}
+                      </td> <!-- Display organizer's first name -->
+
                     </tr>
                   @endforeach
                 </tbody>

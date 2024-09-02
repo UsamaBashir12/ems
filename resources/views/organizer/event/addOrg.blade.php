@@ -41,22 +41,12 @@
                       readonly>
                   </div>
                 </div>
+
                 <div class="form-group mb-3">
                   <label for="description">Description</label>
                   <textarea id="description" name="description" class="form-control" rows="4" required>{{ old('description') }}</textarea>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group mb-3">
-                    <label for="category_id">Category</label>
-                    <select id="category_id" name="category_id" class="form-control" required>
-                      @foreach ($categories as $category)
-                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                          {{ $category->title }}
-                        </option>
-                      @endforeach
-                    </select>
-                  </div>
-                </div>
+
                 <div class="col-md-6">
                   <div class="form-group mb-3">
                     <label for="start_date">Start Date</label>
@@ -64,14 +54,14 @@
                       value="{{ old('start_date') }}" required>
                   </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                   <div class="form-group mb-3">
                     <label for="start_time">Start Time</label>
                     <input type="time" id="start_time" name="start_time" class="form-control"
                       value="{{ old('start_time') }}" required>
                   </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                   <div class="form-group mb-3">
                     <label for="end_date">End Date</label>
                     <input type="date" id="end_date" name="end_date" class="form-control"
@@ -111,10 +101,34 @@
                       value="{{ old('zip_code') }}" required>
                   </div>
                 </div>
-                <div class="form-group mb-3">
-                  <label for="seats_available">Seats Available</label>
-                  <input type="number" id="seats_available" name="seats_available" class="form-control"
-                    value="{{ old('seats_available') }}" required>
+                <div class="col-md-4">
+                  <div class="form-group mb-3">
+                    <label for="seats_available">Seats Available</label>
+                    <input type="number" id="seats_available" name="seats_available" class="form-control"
+                      value="{{ old('seats_available') }}" required>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group mb-3">
+                    <label for="organizer_id">Organizer</label>
+                    <select id="organizer_id" name="organizer_id" class="form-control">
+                      <option value="{{ auth()->user()->id }}" selected>
+                        {{ auth()->user()->first_name }} {{ auth()->user()->last_name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group mb-3">
+                    <label for="category_id">Category</label>
+                    <select id="category_id" name="category_id" class="form-control" required>
+                      @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                          {{ $category->title }}
+                        </option>
+                      @endforeach
+                    </select>
+                  </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group mb-3">
