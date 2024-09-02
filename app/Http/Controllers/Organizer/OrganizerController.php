@@ -6,21 +6,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Category;
-use App\Models\Organizer;
 use App\Http\Controllers\Controller;
-// use App\Models\Event;
-// use App\Models\Category;
 
 class OrganizerController extends Controller
 {
-
-  // public function dashboard()
-  // {
-  //   $eventCount = Event::count();
-  //   $categoryCount = Category::count();
-  //   $events = Event::all();
-  //   return view('organizer.dashboard', compact('eventCount', 'categoryCount', 'events'));
-  // }
   public function dashboard()
   {
     $user = Auth::user();
@@ -40,7 +29,6 @@ class OrganizerController extends Controller
     return view('organizer.dashboard', compact(
       'eventCount',
       'categoryCount',
-      'organizerCount',
       'userCount',
       'categories',
       'users',
@@ -53,13 +41,18 @@ class OrganizerController extends Controller
   {
     return view('organizer.event.addOrg');
   }
-
+  // public function allEvents()
+  // {
+  //   $user = Auth::user();
+  //   $events = Event::where('organizer_id', $user->id)->get();
+  //   return view('organizer.event.allOrg', compact('events'));
+  // }
   public function allEvents()
   {
-    $events = Event::all();
+    $user = Auth::user(); // Get the currently logged-in user
+    $events = Event::where('organizer_id', $user->id)->get(); // Fetch only events for the current organizer
     return view('organizer.event.allOrg', compact('events'));
   }
-
 
   public function editEvent($id)
   {
@@ -73,7 +66,6 @@ class OrganizerController extends Controller
     return view('organizer.event.editOrg', compact('event', 'categories'));
   }
 
-  // App\Http\Controllers\Organizer\OrganizerController.php
   public function destroy($id)
   {
     // Your code to delete the event

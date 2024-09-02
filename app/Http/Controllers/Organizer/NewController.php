@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Organizer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,7 +16,8 @@ class NewController extends Controller
 {
   public function index()
   {
-    $events = Event::all(); // Fetch all events from the database
+    $user = Auth::user(); // Get the currently logged-in user
+    $events = Event::where('organizer_id', $user->id)->get(); // Fetch only events for the current organizer
     $categories = Category::all(); // Fetch all categories from the database
     return view('organizer.event.allOrg', compact('events', 'categories')); // Pass events and categories to the view
   }
@@ -91,9 +94,12 @@ class NewController extends Controller
 
   public function allEvents()
   {
-    $events = Event::all();
+    $user = Auth::user(); // Get the currently logged-in user
+    $events = Event::where('organizer_id', $user->id)->get(); // Fetch only events for the current organizer
     return view('organizer.event.allOrg', compact('events'));
   }
+
+
 
 
   public function destroy(Request $request, $id)
