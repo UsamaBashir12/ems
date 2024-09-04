@@ -86,6 +86,47 @@ class EventController extends Controller
     return view('admin.event.edit', compact('event', 'users', 'categories'));
   }
 
+  // public function update(Request $request, $id)
+  // {
+  //   $request->validate([
+  //     'title' => 'required|string|max:255',
+  //     'slug' => 'required|string|max:255|unique:events,slug,' . $id,
+  //     'description' => 'required|string',
+  //     'organizer_id' => 'required|exists:users,id',
+  //     'category_id' => 'required|exists:categories,id',
+  //     'start_date' => 'required|date',
+  //     'start_time' => 'required|date_format:H:i',
+  //     'end_date' => 'required|date',
+  //     'end_time' => 'required|date_format:H:i',
+  //     'address' => 'required|string',
+  //     'city' => 'required|string',
+  //     'state' => 'required|string',
+  //     'zip_code' => 'required|string',
+  //     'seats_available' => 'required|integer',
+  //     'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+  //     'gallery.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+  //     'status' => 'required|boolean',
+  //   ]);
+
+  //   $event = Event::findOrFail($id);
+
+  //   // Handle file uploads
+  //   if ($request->hasFile('image')) {
+  //     Storage::delete($event->image);
+  //     $event->image = $request->file('image')->store('images/events');
+  //   }
+
+  //   if ($request->hasFile('gallery')) {
+  //     foreach (json_decode($event->gallery, true) as $path) {
+  //       Storage::delete($path);
+  //     }
+  //     $event->gallery = json_encode(array_map(fn($file) => $file->store('images/events/gallery'), $request->file('gallery')));
+  //   }
+
+  //   $event->update($request->except('image', 'gallery'));
+
+  //   return redirect()->route('admin.event.all')->with('success', 'Event updated successfully');
+  // }
   public function update(Request $request, $id)
   {
     $request->validate([
@@ -110,20 +151,43 @@ class EventController extends Controller
 
     $event = Event::findOrFail($id);
 
-    // Handle file uploads
+    // Handle image upload
     if ($request->hasFile('image')) {
-      Storage::delete($event->image);
-      $event->image = $request->file('image')->store('images/events');
-    }
-
-    if ($request->hasFile('gallery')) {
-      foreach (json_decode($event->gallery, true) as $path) {
-        Storage::delete($path);
+      // Delete old image if exists
+      if ($event->image) {
+        Storage::delete('public/' . $event->image);
       }
-      $event->gallery = json_encode(array_map(fn($file) => $file->store('images/events/gallery'), $request->file('gallery')));
+      $imagePath = $request->file('image')->store('images/events');
+    } else {
+      $imagePath = $event->image;
     }
 
-    $event->update($request->except('image', 'gallery'));
+    // Handle gallery upload
+    if ($request->hasFile('gallery')) {
+      $galleryPaths = array_map(fn($file) => $file->store('images/events/gallery'), $request->file('gallery'));
+    } else {
+      $galleryPaths = json_decode($event->gallery, true);
+    }
+
+    $event->update([
+      'title' => $request->input('title'),
+      'slug' => $request->input('slug'),
+      'description' => $request->input('description'),
+      'organizer_id' => $request->input('organizer_id'),
+      'category_id' => $request->input('category_id'),
+      'start_date' => $request->input('start_date'),
+      'start_time' => $request->input('start_time'),
+      'end_date' => $request->input('end_date'),
+      'end_time' => $request->input('end_time'),
+      'address' => $request->input('address'),
+      'city' => $request->input('city'),
+      'state' => $request->input('state'),
+      'zip_code' => $request->input('zip_code'),
+      'seats_available' => $request->input('seats_available'),
+      'image' => $imagePath,
+      'gallery' => json_encode($galleryPaths),
+      'status' => $request->input('status'),
+    ]);
 
     return redirect()->route('admin.event.all')->with('success', 'Event updated successfully');
   }

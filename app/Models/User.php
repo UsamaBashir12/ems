@@ -79,4 +79,12 @@ class User extends Authenticatable
   {
     return $this->hasMany(Event::class, 'organizer_id');
   }
+  //   public function events()
+  // {
+  //     return $this->belongsToMany(Event::class);
+  // }
+  public function bookedEvents()
+  {
+    return $this->belongsToMany(Event::class, 'bookings'); // Assuming you have a 'bookings' pivot table
+  }
 }
