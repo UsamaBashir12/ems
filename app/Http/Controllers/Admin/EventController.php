@@ -40,8 +40,11 @@ class EventController extends Controller
       'status' => 'required|boolean',
     ]);
 
-    $imagePath = $request->file('image') ? $request->file('image')->store('images/events') : null;
-    $galleryPaths = $request->file('gallery') ? array_map(fn($file) => $file->store('images/events/gallery'), $request->file('gallery')) : [];
+    // Store image in public storage
+    $imagePath = $request->file('image') ? $request->file('image')->store('images/events', 'public') : null;
+
+    // Store gallery images in public storage
+    $galleryPaths = $request->file('gallery') ? array_map(fn($file) => $file->store('images/events/gallery', 'public'), $request->file('gallery')) : [];
 
     Event::create([
       'title' => $request->input('title'),
@@ -157,14 +160,18 @@ class EventController extends Controller
       if ($event->image) {
         Storage::delete('public/' . $event->image);
       }
-      $imagePath = $request->file('image')->store('images/events');
+      $imagePath = $request->file('image')->store('images/events', 'public');
     } else {
       $imagePath = $event->image;
     }
 
     // Handle gallery upload
     if ($request->hasFile('gallery')) {
-      $galleryPaths = array_map(fn($file) => $file->store('images/events/gallery'), $request->file('gallery'));
+      // Delete old gallery images
+      foreach (json_decode($event->gallery, true) as $path) {
+        Storage::delete('public/' . $path);
+      }
+      $galleryPaths = array_map(fn($file) => $file->store('images/events/gallery', 'public'), $request->file('gallery'));
     } else {
       $galleryPaths = json_decode($event->gallery, true);
     }
@@ -192,17 +199,30 @@ class EventController extends Controller
     return redirect()->route('admin.event.all')->with('success', 'Event updated successfully');
   }
 
+  // public function destroy($id)
+  // {
+  //   $event = Event::findOrFail($id);
+  //   Storage::delete($event->image);
+  //   foreach (json_decode($event->gallery, true) as $path) {
+  //     Storage::delete($path);
+  //   }
+  //   $event->delete();
+
+  //   return redirect()->route('admin.event.all')->with('success', 'Event deleted successfully');
+  // }
   public function destroy($id)
-  {
+{
     $event = Event::findOrFail($id);
-    Storage::delete($event->image);
-    foreach (json_decode($event->gallery, true) as $path) {
-      Storage::delete($path);
+
+    if (!empty($event->file_path)) {
+        Storage::delete($event->file_path);
     }
+
     $event->delete();
 
-    return redirect()->route('admin.event.all')->with('success', 'Event deleted successfully');
-  }
+    return redirect()->route('admin.event.all')->with('success', 'Event deleted successfully.');
+}
+
 
   public function categories()
   {

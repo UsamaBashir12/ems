@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use Illuminate\Support\Facades\Auth;
+use App\Models\Category; // Import the Category model
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -18,9 +19,13 @@ class UserSideController extends Controller
     // Retrieve all events
     $events = Event::where('status', 1)->get();
 
-    // Pass events to the view
-    return view('user.dashboard', compact('events'));
+    // Retrieve categories or define categories
+    $categories = Category::all(); // Assuming you have a Category model
+
+    // Pass events and categories to the view
+    return view('user.dashboard', compact('events', 'categories'));
   }
+
   public function bookEvent(Request $request, $eventId)
   {
     $user = Auth::user();
