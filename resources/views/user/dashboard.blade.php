@@ -185,178 +185,61 @@
     <div class="container my-5">
       <h3 class="my-5 text-center">Explore Categories</h3>
       <div class="row d-flex flex-wrap">
-        <div class="col">
-          <div class="card h-100">
-            <div class="card-header">
-              <img src="{{ asset('images/categories/category_1.png') }}" alt="" class="w-100">
-            </div>
-            <div class="card-footer">
-              <p>Category Name</p>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100">
-            <div class="card-header">
-              <img src="{{ asset('images/categories/category_1.png') }}" alt="" class="w-100">
-            </div>
-            <div class="card-footer">
-              <p>Category Name</p>
+        @foreach ($categories as $category)
+          <div class="col  mb-4">
+            <div class="card h-100">
+              <div class="card-header">
+                @php
+                  $imageUrl = $category->image ? asset('storage/categories/' . $category->image) : 'default-image-url';
+                @endphp
+                <img src="{{ $imageUrl }}" alt="{{ $category->title }}" class="img-fluid w-100">
+              </div>
+              <div class="card-footer">
+                <p class="text-center">{{ $category->title }}</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col">
-          <div class="card h-100">
-            <div class="card-header">
-              <img src="{{ asset('images/categories/category_1.png') }}" alt="" class="w-100">
-            </div>
-            <div class="card-footer">
-              <p>Category Name</p>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100">
-            <div class="card-header">
-              <img src="{{ asset('images/categories/category_1.png') }}" alt="" class="w-100">
-            </div>
-            <div class="card-footer">
-              <p>Category Name</p>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100">
-            <div class="card-header">
-              <img src="{{ asset('images/categories/category_1.png') }}" alt="" class="w-100">
-            </div>
-            <div class="card-footer">
-              <p>Category Name</p>
-            </div>
-          </div>
-        </div>
+        @endforeach
       </div>
     </div>
     {{--  --}}
 
     {{-- upcoming events --}}
-    <div class="container my-5">
-      <h2 class="fw-bold my-5 text-center">UP COMING EVENTS</h2>
-      <div class="row card-header-style d-flex flex-wrap">
-        {{--  --}}
-        <div class="col-md-4">
-          <a href="{{ route('eventDetails') }}" class="text-decoration-none">
-            <div class="card h-100">
-              <div class="card-header">
-                <img src="{{ asset('images/events/event_1.png') }}" alt="event_1 image" class="w-100">
-              </div>
-              <div class="card-body">
-                <h3>Title of events</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum sapiente nesciunt perferendis impedit
-                  suscipit expedita porro reiciendis mollitia quasi totam?
-                </p>
-              </div>
-              <div class="card-footer d-flex justify-content-between">
-                <p>location</p>
-                <p>price</p>
-              </div>
-            </div>
-          </a>
-        </div>
-        {{--  --}}
-        <div class="col-md-4">
-          <a href="{{ route('eventDetails') }}" class="text-decoration-none">
-            <div class="card h-100">
-              <div class="card-header">
-                <img src="{{ asset('images/events/event_2.png') }}" alt="event_1 image" class="w-100">
-              </div>
-              <div class="card-body">
-                <h3>Title of events</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum sapiente nesciunt perferendis impedit
-                  suscipit expedita porro
-                </p>
-              </div>
-              <div class="card-footer d-flex justify-content-between">
-                <p>location</p>
-                <p>price</p>
-              </div>
-            </div>
-          </a>
-        </div>
-        {{--  --}}
-        <div class="col-md-4">
-          <a href="{{ route('eventDetails') }}" class="text-decoration-none">
-            <div class="card h-100">
-              <div class="card-header">
-                <img src="{{ asset('images/events/event_3.png') }}" alt="event_1 image" class="w-100">
-              </div>
-              <div class="card-body">
-                <h3>Title of events</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum sapiente nesciunt perferendis impedit
-                  suscipit expedita porro reiciendis mollitia quasi totam? Sequi velit ea nulla voluptate, ipsa
-                  praesentium
-                  autem ducimus minima.
-                </p>
-              </div>
-              <div class="card-footer d-flex justify-content-between">
-                <p>location</p>
-                <p>price</p>
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
 
-    </div>
     {{-- Latest News --}}
-    <div class="container">
-      <h3 class="text-center my-5">Latest News</h3>
-      <div class="row d-flex flex-wrap">
-        <div class="col-md-4">
-          <div class="card h-100">
-            <div class="card-header">
-              <img src="{{ asset('images/news/news_1.png') }}" alt="" class="w-100">
-            </div>
-            <div class="card-body">
-              <h3>Title</h3>
-              <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, nihil?</p>
-            </div>
-            <div class="card-footer text-center">
-              <button class="btn btn-dark btn-md">Read more</button>
-            </div>
+
+    <div class="container my-5">
+      <h2 class="fw-bold my-5 text-center">UPCOMING EVENTS</h2>
+      <div class="row card-header-style d-flex flex-wrap">
+        @foreach ($events as $event)
+          <div class="col-md-4 mb-4">
+            <a href="{{ route('events.show', $event->id) }}" class="text-decoration-none">
+              <div class="card h-100">
+                <div class="card-header">
+                  @php
+                    $imageUrl = $event->image
+                        ? asset('storage/events/' . $event->image)
+                        : asset('images/default-event.png');
+                  @endphp
+                  <img src="{{ $event->image ? asset('storage/' . $event->image) : 'default_image_path' }}"
+                    alt="{{ $event->title }}">
+
+                </div>
+
+                <div class="card-body">
+                  <h3>{{ $event->title }}</h3>
+                  <p>{{ $event->description }}</p>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                  <p>{{ $event->location }}</p>
+                  <p>${{ number_format($event->price, 2) }}</p>
+                </div>
+              </div>
+            </a>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card h-100">
-            <div class="card-header">
-              <img src="{{ asset('images/news/news_1.png') }}" alt="" class="w-100">
-            </div>
-            <div class="card-body">
-              <h3>Title</h3>
-              <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, nihil?</p>
-            </div>
-            <div class="card-footer text-center">
-              <button class="btn btn-dark btn-md">Read more</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card h-100">
-            <div class="card-header">
-              <img src="{{ asset('images/news/news_1.png') }}" alt="" class="w-100">
-            </div>
-            <div class="card-body">
-              <h3>Title</h3>
-              <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, nihil?</p>
-            </div>
-            <div class="card-footer text-center">
-              <button class="btn btn-dark btn-md">Read more</button>
-            </div>
-          </div>
-        </div>
+        @endforeach
       </div>
     </div>
-
     <script>
       const filterContainer = document.querySelector(".gallery-filter"),
         galleryItems = document.querySelectorAll(".gallery-item");

@@ -118,6 +118,7 @@
                     <th>End Date</th>
                     <th>Location</th>
                     <th>Organizer</th>
+                    <th>Action</th> <!-- Added a new column for actions -->
                   </tr>
                 </thead>
                 <tbody>
@@ -129,12 +130,19 @@
                       <td>{{ \Carbon\Carbon::parse($event->start_date)->format('d-m-Y') }}</td>
                       <td>{{ \Carbon\Carbon::parse($event->end_date)->format('d-m-Y') }}</td>
                       <td>{{ $event->address }}</td>
-                      {{-- <td>{{ $event->organizer }}</td> --}}
                       <td>
                         id:{{ $event->organizer->id }} - {{ $event->organizer->first_name }}
                         {{ $event->organizer->last_name }}
-                      </td> <!-- Display organizer's first name -->
-
+                      </td>
+                      <td>
+                        <!-- Form for delete action -->
+                        <form action="{{ route('admin.event.destroy', $event->id) }}" method="POST"
+                          onsubmit="return confirm('Are you sure you want to delete this event?');">
+                          @csrf
+                          @method('DELETE')
+                          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                      </td>
                     </tr>
                   @endforeach
                 </tbody>
@@ -143,6 +151,7 @@
           </div>
         </div>
       </main>
+
       <br><br><br><br><br><br><br>
     </div>
   </div>

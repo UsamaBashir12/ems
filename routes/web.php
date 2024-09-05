@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Organizer\OrganizerController;
 use App\Http\Controllers\Organizer\NewController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\HomeController;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -104,6 +106,10 @@ Route::get('/register', [RegisteredUserController::class, 'create'])->name('regi
 Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
 Route::patch('/admin/user/{id}/activate', [UserController::class, 'activate'])->name('admin.user.activate');
 Route::patch('/admin/user/{id}/deactivate', [UserController::class, 'deactivate'])->name('admin.user.deactivate');
-
+Route::get('/', [HomeController::class, 'welcome'])->name('home');
+Route::get('/events', [HomeController::class, 'events'])->name('events.index'); // For listing events
+Route::get('/events/{id}', [HomeController::class, 'show'])->name('events.show'); // For showing a single event
 // Authentication routes
+Route::get('/events', [HomeController::class, 'index'])->name('events');
+
 require __DIR__ . '/auth.php';

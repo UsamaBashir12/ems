@@ -17,28 +17,24 @@ class CategoryController extends Controller
 
   public function view($id)
   {
-    // Fetch the category from the database or perform your logic
     $category = Category::findOrFail($id);
-
-    // Return a view with the category data
     return view('admin.category.view', compact('category'));
   }
-  public function edit($id = null)
-  {
-    if (!$id) {
-      abort(404, 'Category not found.');
-    }
 
+  public function edit($id)
+  {
     $category = Category::findOrFail($id);
-    $categories = Category::all(); // or get your parent categories here
+    $categories = Category::all(); // Fetch parent categories if needed
     return view('admin.category.edit', compact('category', 'categories'));
   }
+
   public function all()
   {
-    $categories = Category::all(); // Assuming Category is a model
+    $categories = Category::all();
     return view('admin.category.view', compact('categories'));
   }
 
+  // Store method
   public function store(Request $request)
   {
     $request->validate([
@@ -49,11 +45,7 @@ class CategoryController extends Controller
       'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
     ]);
 
-    if ($request->hasFile('image')) {
-      $imagePath = $request->file('image')->store('public/categories');
-    } else {
-      $imagePath = null;
-    }
+    $imagePath = $request->hasFile('image') ? $request->file('image')->store('public/categories') : null;
 
     $category = Category::create([
       'title' => $request->input('title'),
@@ -63,9 +55,10 @@ class CategoryController extends Controller
       'image' => $imagePath ? basename($imagePath) : null,
     ]);
 
-    return redirect()->route('admin.dashboard', ['id' => $category->id])->with('success', 'Category created successfully.');
+    return redirect()->route('admin.dashboard')->with('success', 'Category created successfully.');
   }
 
+  // Update method
   public function update(Request $request, $id)
   {
     $request->validate([
@@ -78,6 +71,7 @@ class CategoryController extends Controller
     ]);
 
     $category = Category::findOrFail($id);
+
     $category->title = $request->input('title');
     $category->slug = $request->input('slug');
     $category->description = $request->input('description');
@@ -85,16 +79,20 @@ class CategoryController extends Controller
     $category->status = $request->input('status');
 
     if ($request->hasFile('image')) {
-      $image = $request->file('image');
-      $filename = time() . '.' . $image->getClientOriginalExtension();
-      $image->storeAs('public/images', $filename);
-      $category->image = $filename;
+      if ($category->image && Storage::exists('public/categories/' . $category->image)) {
+        Storage::delete('public/categories/' . $category->image);
+      }
+
+      $imagePath = $request->file('image')->store('public/categories');
+      $category->image = basename($imagePath);
     }
 
     $category->save();
 
-    return redirect()->route('admin.category.view', ['id' => $id])->with('success', 'Category updated successfully.');
+    return redirect()->route('admin.category.view', ['id' => $id])
+      ->with('success', 'Category updated successfully.');
   }
+
 
   public function show($id)
   {
@@ -105,15 +103,12 @@ class CategoryController extends Controller
     return view('admin.category.view', compact('category'));
   }
 
-
-
   public function destroy($id)
   {
     $category = Category::findOrFail($id);
 
-    // Delete associated image if exists
-    if ($category->image) {
-      Storage::delete('public/categories/' . $category->image);
+    if ($category->image_path) {
+      Storage::delete($category->image_path);
     }
 
     $category->delete();
