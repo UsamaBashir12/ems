@@ -13,6 +13,7 @@ use App\Http\Controllers\Organizer\OrganizerController;
 use App\Http\Controllers\Organizer\NewController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\HomeController;
+
 use Illuminate\Support\Facades\Route;
 
 

@@ -28,7 +28,12 @@ class HomeController extends Controller
   {
     $categories = Category::all();
     $events = Event::all();
+    // dd($categories);
 
-    return view('home', compact('categories', 'events'));
+    return view('events', compact('categories', 'events'));
   }
+  // public function welcome()
+  // {
+
+  // }
 }

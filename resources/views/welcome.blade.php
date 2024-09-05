@@ -1,5 +1,12 @@
 @extends('layouts.layout')
-
+<style>
+  .select-category {
+    color: black;
+    /* Ensures text color is black */
+    background-color: white;
+    /* Ensures background is white */
+  }
+</style>
 @section('title', 'HOME PAGE')
 @section('content')
   {{-- banner hero --}}
@@ -15,169 +22,36 @@
             <div class="d-flex align-items-center">
               <select class="form-select me-2 select-category" aria-label="Select Category">
                 <option selected>Choose Category</option>
-                <option value="1">Category 1</option>
-                <option value="2">Category 2</option>
-                <option value="3">Category 3</option>
+
+                @foreach ($categories as $category)
+                  <option value="{{ $category->id }}">{{ $category->title }}</option>
+                @endforeach
               </select>
               <input type="text" class="form-control me-2 search-input" placeholder="Search..." aria-label="Search">
               <button class="btn btn-primary search-button">Search</button>
             </div>
           </div>
-
         </div>
         {{-- gallery filter --}}
-        <section class="gallery">
+        <section class="events">
           <div class="container">
             <div class="row">
-              <div class="gallery-filter">
-                <span class="filter-item active" data-filter="all">All</span>
-                <span class="filter-item" data-filter="shoe">Wedding</span>
-                <span class="filter-item" data-filter="headphone">Business</span>
-                <span class="filter-item" data-filter="camera">Career</span>
-              </div>
-            </div>
-            <div class="row">
-              <!-- gallery item start -->
-              <div class="gallery-item shoe">
-                <div class="gallery-item-inner">
-                  <img src="https://i.postimg.cc/7PJ4yYHh/revolt-164-6w-VEHf-I-unsplash.jpg" alt="shoe">
-                  <div>
-                    <small>admin</small>
-                    <h3>heading</h3>
-                    <p>paragraph of this and that those even are and these are those in this and these are thoser ins thse
-                      ar ehtos ein these.</p>
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-md-6 m-0 p-0 ">
-                          Wilton , United States
-                        </div>
-                        <div class="col-md-6 m-0 p-0 text-end">
-                          <span class="text-primary">$95</span>
-                        </div>
-                      </div>
+              @foreach ($events as $event)
+                <div class="col-md-4 mb-4">
+                  <div class="event-item">
+                    <img src="{{ $event->image_url }}" alt="{{ $event->title }}" class="img-fluid">
+                    <div class="event-details">
+                      <h3>{{ $event->title }}</h3>
+                      <p>{{ $event->description }}</p>
+                      <p>{{ $event->address }}, {{ $event->city }}</p>
                     </div>
                   </div>
                 </div>
-              </div>
-              <!-- gallery item end -->
-              <!-- gallery item start -->
-              <div class="gallery-item headphone">
-                <div class="gallery-item-inner">
-                  <img src="https://i.postimg.cc/zf7MT4q9/istockphoto-1289318271-170667a.jpg" alt="headphone">
-                  <div>
-                    <small>admin</small>
-                    <h3>heading</h3>
-                    <p>paragraph of this and that those even are and these are those in this and these are thoser ins thse
-                      ar ehtos ein these.</p>
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-md-6 m-0 p-0 ">
-                          Wilton , United States
-                        </div>
-                        <div class="col-md-6 m-0 p-0 text-end">
-                          <span class="text-primary">$95</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- gallery item end -->
-              <!-- gallery item start -->
-              <div class="gallery-item camera">
-                <div class="gallery-item-inner">
-                  <img src="https://i.postimg.cc/vZ7QQdMP/nordwood-themes-F3-Dde-9thd8-unsplash.jpg" alt="camera">
-                  <div>
-                    <small>admin</small>
-                    <h3>heading</h3>
-                    <p>paragraph of this and that those even are and these are those in this and these are thoser ins thse
-                      ar ehtos ein these.</p>
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-md-6 m-0 p-0 ">
-                          Wilton , United States
-                        </div>
-                        <div class="col-md-6 m-0 p-0 text-end">
-                          <span class="text-primary">$95</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- gallery item end -->
-              <!-- gallery item start -->
-              <div class="gallery-item headphone">
-                <div class="gallery-item-inner">
-                  <img src="https://i.postimg.cc/3xTY15HR/c-d-x-PDX-a-82obo-unsplash.jpg" alt="headphone">
-                  <div>
-                    <small>admin</small>
-                    <h3>heading</h3>
-                    <p>paragraph of this and that those even are and these are those in this and these are thoser ins thse
-                      ar ehtos ein these.</p>
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-md-6 m-0 p-0 ">
-                          Wilton , United States
-                        </div>
-                        <div class="col-md-6 m-0 p-0 text-end">
-                          <span class="text-primary">$95</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- gallery item end -->
-              <!-- gallery item start -->
-              <div class="gallery-item camera">
-                <div class="gallery-item-inner">
-                  <img src="https://i.postimg.cc/PrYL89TD/patrick-dozk-Vh-Dyvh-Q-unsplash.jpg" alt="camera">
-                  <div>
-                    <small>admin</small>
-                    <h3>heading</h3>
-                    <p>paragraph of this and that those even are and these are those in this and these are thoser ins thse
-                      ar ehtos ein these.</p>
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-md-6 m-0 p-0 ">
-                          Wilton , United States
-                        </div>
-                        <div class="col-md-6 m-0 p-0 text-end">
-                          <span class="text-primary">$95</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- gallery item end -->
-              <!-- gallery item start -->
-              <div class="gallery-item headphone">
-                <div class="gallery-item-inner">
-                  <img src="https://i.postimg.cc/PqYyN2Nr/ervo-rocks-Zam8-Tv-Eg-N5o-unsplash.jpg" alt="headphone3">
-                  <div>
-                    <small>admin</small>
-                    <h3>heading</h3>
-                    <p>paragraph of this and that those even are and these are those in this and these are thoser ins thse
-                      ar ehtos ein these.</p>
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-md-6 m-0 p-0 ">
-                          Wilton , United States
-                        </div>
-                        <div class="col-md-6 m-0 p-0 text-end">
-                          <span class="text-primary">$95</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- gallery item end -->
+              @endforeach
             </div>
           </div>
         </section>
+
         {{--  --}}
       </div>
     </div>
