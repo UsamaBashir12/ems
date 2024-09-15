@@ -7,12 +7,20 @@ use App\Models\User;
 
 class MainOrganizerController extends Controller
 {
-  //
   public function index()
   {
-    // Fetch all organizers (assuming role_id = 2 is for organizers)
     $organizers = User::where('role_id', 2)->get();
 
-    return view('organizers.index', compact('organizers'));
+    // Ensure the data is retrieved correctly
+    // dd($organizers); // Comment this out once verified
+
+    return view('organizer', compact('organizers'));
+  }
+
+  public function show($id)
+  {
+    // Implement this if you want to show detailed information about a single organizer
+    $organizer = User::findOrFail($id);
+    return view('organizer', compact('organizer'));
   }
 }

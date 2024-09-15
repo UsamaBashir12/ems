@@ -10,6 +10,8 @@ use App\Http\Controllers\User\UserSideController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Organizer\OrganizerController;
+use App\Http\Controllers\MainOrganizerController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Organizer\NewController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\HomeController;
@@ -32,8 +34,14 @@ Route::get('/events', function () {
   return view('events');
 })->name('events');
 
-// Organizers
-Route::get('/organizers', [OrganizerController::class, 'index'])->name('organizers.index');
+// List all organizers
+Route::get('/organizers', [MainOrganizerController::class, 'index'])->name('organizer');
+
+// Show a specific organizer's details
+Route::get('/organizers/{id}', [MainOrganizerController::class, 'show'])->name('organizers.show');
+
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 // =============================*** Admin Routes *** ==========================================
 Route::prefix('admin')->middleware(['auth', 'role:1', 'checkActive'])->group(function () {
