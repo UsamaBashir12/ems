@@ -48,6 +48,8 @@ class OrganizerEventHandlerController extends Controller
       'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
       'gallery.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
       'status' => 'required|in:0,1',
+      'price' => 'required|numeric',  // Add validation for the price
+
     ]);
 
     // Store the event
@@ -137,6 +139,8 @@ class OrganizerEventHandlerController extends Controller
       'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
       'gallery.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
       'status' => 'required|in:0,1',
+      'price' => 'required|numeric',  // Add validation for the price
+
     ]);
 
     $event = Event::findOrFail($id);

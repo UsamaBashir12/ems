@@ -43,10 +43,10 @@
         <h3>Legal</h3>
         <ul class="list-unstyled">
           <li class="my-2">
-            <a href="" class="text-decoration-none">Login</a>
+            <a href="{{ route('login') }}" class="text-decoration-none">Login</a>
           </li>
           <li class="my-2">
-            <a href="" class="text-decoration-none">Register</a>
+            <a href="{{ route('login') }}" class="text-decoration-none">Register</a>
           </li>
           <li class="my-2">
             <a href="" class="text-decoration-none">Term & Conditions</a>

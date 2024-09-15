@@ -123,7 +123,8 @@
                     <label for="category_id">Category</label>
                     <select id="category_id" name="category_id" class="form-control" required>
                       @foreach ($categories as $category)
-                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                        <option value="{{ $category->id }}"
+                          {{ old('category_id') == $category->id ? 'selected' : '' }}>
                           {{ $category->title }}
                         </option>
                       @endforeach
@@ -140,6 +141,12 @@
                   <div class="form-group mb-3">
                     <label for="gallery">Gallery</label>
                     <input type="file" id="gallery" name="gallery[]" class="form-control" multiple>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="price">Price</label>
+                    <input class="form-control" type="text" name="price" value="{{ old('price') }}" />
                   </div>
                 </div>
               </div>
