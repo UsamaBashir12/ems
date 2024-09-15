@@ -124,26 +124,15 @@
                     <label for="seats_available">Seats Available</label>
                     <input type="number" id="seats_available" name="seats_available" class="form-control" required>
                   </div>
-      
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="price">Price</label>
+                    <input type="text" name="price" value="{{ old('price') }}" />
+                  </div>
                 </div>
               </div>
             </div>
-
-
-
- 
-
-            <!-- Other form fields here -->
-
-
-
-
-
-
-
-
-
-
             <br>
             <button type="submit" class="btn btn-primary">Create Event</button>
           </form>

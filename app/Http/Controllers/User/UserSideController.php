@@ -3,107 +3,111 @@
 namespace App\Http\Controllers\User;
 
 use Illuminate\Support\Facades\Auth;
-use App\Models\Category; // Import the Category model
-
+use App\Models\Category;
+use App\Models\User;
+use App\Models\Event;
+use App\Models\Booking;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Event; // Assuming you have an Event model
+use Carbon\Carbon;
 
 class UserSideController extends Controller
 {
-  /**
-   * Display a listing of the resource.
-   */
   public function dashboard()
   {
-    // Retrieve all events
-    $events = Event::where('status', 1)->get();
+    $today = Carbon::today()->toDateString();
 
-    // Retrieve categories or define categories
-    $categories = Category::all(); // Assuming you have a Category model
+    \Log::info("Today's Date: " . $today);
 
-    // Pass events and categories to the view
-    return view('user.dashboard', compact('events', 'categories'));
+    // Retrieve all events starting from today
+    $events = Event::whereDate('start_date', '>=', $today)
+      ->get();
+
+    \Log::info('Retrieved Events:', $events->toArray());
+
+    $organizers = User::where('role_id', 2)->get(); // Organizers
+    $categories = Category::all();
+
+    return view('user.dashboard', compact('events', 'categories', 'organizers'));
+  }
+  // Show the booking form
+  public function showBookingForm($eventId)
+  {
+    $event = Event::findOrFail($eventId);
+    return view('user.book', compact('event'));
   }
 
-  public function bookEvent(Request $request, $eventId)
+
+  public function book(Request $request, int $eventId)
   {
-    $user = Auth::user();
+    // Find the event by ID
     $event = Event::findOrFail($eventId);
 
-    // Check if the user has already booked this event
-    if ($user->events->contains($event)) {
-      return redirect()->back()->with('error', 'You have already booked this event.');
-    }
+    // Validate the request input
+    $validated = $request->validate([
+      'free_quantity' => 'required|integer|min:0',
+      'normal_quantity' => 'required|integer|min:0',
+      'all_quantity' => 'required|integer|min:0',
+      'business_quantity' => 'required|integer|min:0',
+      'first_quantity' => 'required|integer|min:0',
+    ]);
 
-    // Book the event
-    $user->events()->attach($eventId);
+    // Define ticket prices
+    $ticketPrices = [
+      'free_quantity' => 0,
+      'normal_quantity' => 95,
+      'all_quantity' => 120,
+      'business_quantity' => 150,
+      'first_quantity' => 200,
+    ];
 
-    return redirect()->back()->with('success', 'Event booked successfully!');
+    // Calculate the total price
+    $totalPrice = array_reduce(array_keys($validated), function ($carry, $key) use ($validated, $ticketPrices) {
+      return $carry + ($validated[$key] * $ticketPrices[$key]);
+    }, 0);
+
+    \Log::info('Total Price:', ['total_price' => $totalPrice]);
+
+    // Store the booking in the database
+    Booking::create([
+      'event_id' => $event->id,
+      'user_id' => auth()->id(),
+      'free_quantity' => $validated['free_quantity'],
+      'normal_quantity' => $validated['normal_quantity'],
+      'all_quantity' => $validated['all_quantity'],
+      'business_quantity' => $validated['business_quantity'],
+      'first_quantity' => $validated['first_quantity'],
+      'total_price' => $totalPrice,
+    ]);
+
+    // Redirect with a success message
+    return redirect()->route('user.dashboard', $event->id)->with('success', 'Tickets successfully booked!');
   }
 
-  public function viewBookedEvents()
-  {
-    $user = Auth::user();
-    // Fetch the events booked by the current user
-    $events = $user->bookedEvents; // Assuming you have a relation named 'bookedEvents'
 
-    return view('user.booked-events', compact('events'));
-  }
+
+
 
   /**
-   * Display a listing of the resource.
+   * Show the booking form for an event.
+   *
+   * @param int $eventId
+   * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
    */
-  public function index()
-  {
-    //
-  }
 
-  /**
-   * Show the form for creating a new resource.
-   */
-  public function create()
+  public function confirmBooking(Request $request, $eventId)
   {
-    //
-  }
+    // Handle booking logic here
+    // For example, you might save the booking to the database
 
-  /**
-   * Store a newly created resource in storage.
-   */
-  public function store(Request $request)
-  {
-    //
+    // Redirect to a confirmation page or back with a success message
+    return redirect()->route('book.event', ['events' => $eventId])->with('success', 'Booking confirmed!');
   }
-
   /**
-   * Display the specified resource.
+   * Book an event.
+   *
+   * @param \Illuminate\Http\Request $request
+   * @param int $eventId
+   * @return \Illuminate\Http\RedirectResponse
    */
-  public function show(string $id)
-  {
-    //
-  }
-
-  /**
-   * Show the form for editing the specified resource.
-   */
-  public function edit(string $id)
-  {
-    //
-  }
-
-  /**
-   * Update the specified resource in storage.
-   */
-  public function update(Request $request, string $id)
-  {
-    //
-  }
-
-  /**
-   * Remove the specified resource from storage.
-   */
-  public function destroy(string $id)
-  {
-    //
-  }
 }

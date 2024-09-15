@@ -86,13 +86,18 @@ Route::prefix('organizer')->middleware(['auth', 'role:2', 'checkActive'])->group
 });
 // =============================*** Users *** ==========================================
 Route::prefix('user')->middleware(['auth', 'role:3', 'checkActive'])->group(function () {
+  // Dashboard Route
   Route::get('dashboard', [UserSideController::class, 'dashboard'])->name('user.dashboard');
-  Route::post('/events/book/{event}', [UserSideController::class, 'bookEvent'])->name('events.book');
-  Route::post('/user/events/book/{event}', [UserSideController::class, 'bookEvent'])->name('events.book');
-  Route::get('/user/events/booked', [UserSideController::class, 'viewBookedEvents'])->name('events.booked');
-  Route::get('/user/events/booked', [UserSideController::class, 'viewBookedEvents'])->name('events.booked');
-  Route::get('/user/events/booked', [UserSideController::class, 'viewBookedEvents'])->name('events.booked');
+
+  // Show Booking Form (GET)
+  Route::get('/events/{event}/book', [UserSideController::class, 'showBookingForm'])->name('user.book');
+
+  // Handle Booking Submission (POST)
+  Route::post('/events/{event}/book', [UserSideController::class, 'book'])->name('events.book');
 });
+
+
+
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login.store');
 Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 // =============================*** Auth *** ==========================================
@@ -111,5 +116,7 @@ Route::get('/events', [HomeController::class, 'events'])->name('events.index'); 
 Route::get('/events/{id}', [HomeController::class, 'show'])->name('events.show'); // For showing a single event
 // Authentication routes
 Route::get('/events', [HomeController::class, 'index'])->name('events');
+Route::get('/events/{id}', [HomeController::class, 'show'])->name('events.show');
+// Route::get('/', [HomeController::class, 'index'])->name('home');
 
 require __DIR__ . '/auth.php';

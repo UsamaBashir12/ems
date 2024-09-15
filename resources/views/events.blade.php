@@ -20,12 +20,14 @@
     margin-top: 20px;
   }
 
-  input {
-    widows: 50%;
-  }
-
   .gallery {
     padding: 0px !important;
+  }
+
+  input[type="search"],
+  input[type="text"],
+  select {
+    width: 100%;
   }
 </style>
 
@@ -37,236 +39,131 @@
         <h5>Home / <a href="#" class="text-decoration-none text-white">Events</a></h5>
       </div>
     </div>
-    {{--  --}}
     <div class="container mt-5">
       <div class="row">
         <!-- Search and Filters Section -->
         <div class="col-md-3">
-          <form>
+          <form method="GET" action="">
             <!-- Search Bar -->
             <div class="mb-3">
               <label for="search" class="form-label">Search</label>
-              <div class="input-group">
-                <form action="">
-                  <input type="search" class="form-control" id="search" placeholder="Search events">
-                  <button class="btn btn-primary" type="submit">Go</button>
-                </form>
-              </div>
+              <input type="search" class="form-control" id="search" name="search" placeholder="Search events"
+                value="{{ request('search') }}">
             </div>
 
             <!-- Filter by Date -->
             <div class="mb-3">
               <label for="startDate" class="form-label">Start Date</label>
-              <input type="date" class="form-control" id="startDate">
+              <input type="date" class="form-control" id="startDate" name="start_date"
+                value="{{ request('start_date') }}">
             </div>
             <div class="mb-3">
               <label for="endDate" class="form-label">End Date</label>
-              <input type="date" class="form-control" id="endDate">
+              <input type="date" class="form-control" id="endDate" name="end_date" value="{{ request('end_date') }}">
             </div>
 
             <!-- Location Field -->
             <div class="mb-3">
               <label for="location" class="form-label">Location</label>
-              <input type="text" class="form-control" id="location" placeholder="Enter location">
+              <input type="text" class="form-control" id="location" name="location" placeholder="Enter location"
+                value="{{ request('location') }}">
             </div>
 
             <!-- Category Field -->
             <div class="mb-3">
               <label for="category" class="form-label">Category</label>
-              <select class="form-select" id="category">
-                <option selected>Select category</option>
-                <option value="1">Music</option>
-                <option value="2">Sports</option>
-                <option value="3">Conferences</option>
-                <option value="4">Workshops</option>
+              <select class="form-select" id="category" name="category">
+                <option value="">Select category</option>
+                @foreach ($categories as $category)
+                  <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                    {{ $category->title }}
+                  </option>
+                @endforeach
               </select>
             </div>
 
             <!-- Event Type -->
-            <div class="mb-3">
+            {{-- <div class="mb-3">
               <label class="form-label">Event Type</label>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="eventType" id="onlineEvent" value="online">
-                <label class="form-check-label" for="onlineEvent">
-                  Online
-                </label>
+                <input class="form-check-input" type="radio" name="event_type" id="onlineEvent" value="online"
+                  {{ request('event_type') == 'online' ? 'checked' : '' }}>
+                <label class="form-check-label" for="onlineEvent">Online</label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="eventType" id="offlineEvent" value="offline">
-                <label class="form-check-label" for="offlineEvent">
-                  Offline
-                </label>
+                <input class="form-check-input" type="radio" name="event_type" id="offlineEvent" value="offline"
+                  {{ request('event_type') == 'offline' ? 'checked' : '' }}>
+                <label class="form-check-label" for="offlineEvent">Offline</label>
               </div>
-            </div>
+            </div> --}}
 
             <!-- Price Filter -->
             <div class="mb-3">
               <label for="priceRange" class="form-label">Price Range ($)</label>
-              <input type="range" class="form-range" id="priceRange" min="0" max="1000" step="10"
-                oninput="updatePriceRange(this.value)">
-              <div class="mt-2">Selected Price: $<span id="priceRangeValue">500</span></div>
+              <input type="range" class="form-range" id="priceRange" name="price_range" min="0" max="1000"
+                step="10" value="{{ request('price_range', 500) }}" oninput="updatePriceRange(this.value)">
+              <div class="mt-2">Selected Price: $<span id="priceRangeValue">{{ request('price_range', 500) }}</span>
+              </div>
             </div>
+
+            <button type="submit" class="btn btn-primary">Apply Filters</button>
           </form>
         </div>
 
         <!-- Event Listing Section -->
         <div class="col-md-9">
-          <section class="gallery">
-            <div class="container">
-              <div class="row">
-                <!-- gallery item start -->
-                <div class="gallery-item shoe">
-                  <div class="gallery-item-inner">
-                    <img src="https://i.postimg.cc/7PJ4yYHh/revolt-164-6w-VEHf-I-unsplash.jpg" alt="shoe">
-                    <div>
-                      <small>admin</small>
-                      <h3>heading</h3>
-                      <p>paragraph of this and that those even are and these are those in this and these are thoser ins
-                        thse
-                        ar ehtos ein these.</p>
-                      <div class="container-fluid">
-                        <div class="row">
-                          <div class="col-md-6 m-0 p-0 ">
-                            Wilton , United States
-                          </div>
-                          <div class="col-md-6 m-0 p-0 text-end">
-                            <span class="text-primary">$95</span>
-                          </div>
-                        </div>
+          <div class="row d-flex flex-wrap">
+            @forelse ($events as $event)
+              <div class="col-md-4 mb-4 h-100 d-flex flex-wrap">
+                <a href="{{ route('events.show', $event->id) }}" class="text-decoration-none">
+                  <div class="card h-100">
+                    <div class="card-header p-0">
+                      @php
+                        // Use default event image if no image is provided
+                        $imageUrl = $event->image
+                            ? asset('storage/events/' . $event->image)
+                            : asset('images/default-event.png');
+                      @endphp
+                      <div style="height: 250px;">
+                        <img src="{{ $imageUrl }}" alt="{{ $event->title }}"
+                          class="h-100 w-100 img-fluid card-img-top">
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <p class="text-primary fs-5 fw-bold">
+                        By: {{ $event->organizer->first_name }}
+                      </p>
+                      <h5 class="card-title">{{ $event->title }}</h5>
+                      <p class="card-text">{{ Str::limit($event->description, 100) }}</p>
+                    </div>
+                    <div class="card-footer">
+                      <p><b>Price:</b> ${{ number_format($event->price, 2) }}</p>
+                      <div class="d-flex justify-content-between">
+                        <p class="mb-0">{{ \Carbon\Carbon::parse($event->start_date)->format('M d, Y') }}</p>
+                        <p class="mb-0">{{ \Carbon\Carbon::parse($event->end_date)->format('M d, Y') }}</p>
                       </div>
                     </div>
                   </div>
-                </div>
-                <!-- gallery item end -->
-                <!-- gallery item start -->
-                <div class="gallery-item headphone">
-                  <div class="gallery-item-inner">
-                    <img src="https://i.postimg.cc/zf7MT4q9/istockphoto-1289318271-170667a.jpg" alt="headphone">
-                    <div>
-                      <small>admin</small>
-                      <h3>heading</h3>
-                      <p>paragraph of this and that those even are and these are those in this and these are thoser ins
-                        thse
-                        ar ehtos ein these.</p>
-                      <div class="container-fluid">
-                        <div class="row">
-                          <div class="col-md-6 m-0 p-0 ">
-                            Wilton , United States
-                          </div>
-                          <div class="col-md-6 m-0 p-0 text-end">
-                            <span class="text-primary">$95</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- gallery item end -->
-                <!-- gallery item start -->
-                <div class="gallery-item camera">
-                  <div class="gallery-item-inner">
-                    <img src="https://i.postimg.cc/vZ7QQdMP/nordwood-themes-F3-Dde-9thd8-unsplash.jpg" alt="camera">
-                    <div>
-                      <small>admin</small>
-                      <h3>heading</h3>
-                      <p>paragraph of this and that those even are and these are those in this and these are thoser ins
-                        thse
-                        ar ehtos ein these.</p>
-                      <div class="container-fluid">
-                        <div class="row">
-                          <div class="col-md-6 m-0 p-0 ">
-                            Wilton , United States
-                          </div>
-                          <div class="col-md-6 m-0 p-0 text-end">
-                            <span class="text-primary">$95</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- gallery item end -->
-                <!-- gallery item start -->
-                <div class="gallery-item headphone">
-                  <div class="gallery-item-inner">
-                    <img src="https://i.postimg.cc/3xTY15HR/c-d-x-PDX-a-82obo-unsplash.jpg" alt="headphone">
-                    <div>
-                      <small>admin</small>
-                      <h3>heading</h3>
-                      <p>paragraph of this and that those even are and these are those in this and these are thoser ins
-                        thse
-                        ar ehtos ein these.</p>
-                      <div class="container-fluid">
-                        <div class="row">
-                          <div class="col-md-6 m-0 p-0 ">
-                            Wilton , United States
-                          </div>
-                          <div class="col-md-6 m-0 p-0 text-end">
-                            <span class="text-primary">$95</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- gallery item end -->
-                <!-- gallery item start -->
-                <div class="gallery-item camera">
-                  <div class="gallery-item-inner">
-                    <img src="https://i.postimg.cc/PrYL89TD/patrick-dozk-Vh-Dyvh-Q-unsplash.jpg" alt="camera">
-                    <div>
-                      <small>admin</small>
-                      <h3>heading</h3>
-                      <p>paragraph of this and that those even are and these are those in this and these are thoser ins
-                        thse
-                        ar ehtos ein these.</p>
-                      <div class="container-fluid">
-                        <div class="row">
-                          <div class="col-md-6 m-0 p-0 ">
-                            Wilton , United States
-                          </div>
-                          <div class="col-md-6 m-0 p-0 text-end">
-                            <span class="text-primary">$95</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- gallery item end -->
-                <!-- gallery item start -->
-                <div class="gallery-item headphone">
-                  <div class="gallery-item-inner">
-                    <img src="https://i.postimg.cc/PqYyN2Nr/ervo-rocks-Zam8-Tv-Eg-N5o-unsplash.jpg" alt="headphone3">
-                    <div>
-                      <small>admin</small>
-                      <h3>heading</h3>
-                      <p>paragraph of this and that those even are and these are those in this and these are thoser ins
-                        thse
-                        ar ehtos ein these.</p>
-                      <div class="container-fluid">
-                        <div class="row">
-                          <div class="col-md-6 m-0 p-0 ">
-                            Wilton , United States
-                          </div>
-                          <div class="col-md-6 m-0 p-0 text-end">
-                            <span class="text-primary">$95</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- gallery item end -->
+                </a>
               </div>
-            </div>
-          </section>
+            @empty
+              <!-- If there are no events available today or upcoming, show this message -->
+              <div class="col-12">
+                <p class="text-center mt-5">No events available today or upcoming. Please check back later!</p>
+              </div>
+            @endforelse
+          </div>
+
+          <!-- Paginate the events -->
+          <div class="d-flex justify-content-center">
+            {{ $events->appends(request()->query())->links() }}
+          </div>
         </div>
+
       </div>
     </div>
-    {{--  --}}
-    {{-- gallery filter --}}
   </div>
+
   <script>
     // Function to update the displayed price range
     function updatePriceRange(value) {
@@ -275,8 +172,8 @@
 
     // Initialize with the default value
     document.addEventListener('DOMContentLoaded', function() {
-      document.getElementById('priceRange').value = 500; // Set initial value
-      updatePriceRange(500); // Update display with the initial value
+      document.getElementById('priceRange').value = {{ request('price_range', 500) }}; // Set initial value
+      updatePriceRange({{ request('price_range', 500) }}); // Update display with the initial value
     });
   </script>
 @endsection

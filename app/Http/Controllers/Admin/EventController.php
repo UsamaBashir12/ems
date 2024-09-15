@@ -38,6 +38,8 @@ class EventController extends Controller
       'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
       'gallery.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
       'status' => 'required|boolean',
+      'price' => 'required|numeric',  // Add validation for the price
+
     ]);
 
     // Store image in public storage
@@ -64,6 +66,7 @@ class EventController extends Controller
       'image' => $imagePath,
       'gallery' => json_encode($galleryPaths),
       'status' => $request->input('status'),
+      'price' => $request->input('price'), // Ensure this is a valid numeric value
     ]);
 
     return redirect()->route('admin.event.all')->with('success', 'Event created successfully');
@@ -150,6 +153,8 @@ class EventController extends Controller
       'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
       'gallery.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
       'status' => 'required|boolean',
+      'price' => 'required|numeric',  // Add validation for the price
+
     ]);
 
     $event = Event::findOrFail($id);
@@ -194,6 +199,8 @@ class EventController extends Controller
       'image' => $imagePath,
       'gallery' => json_encode($galleryPaths),
       'status' => $request->input('status'),
+      'price' => $request->input('price'),  // removed the unnecessary validation here
+
     ]);
 
     return redirect()->route('admin.event.all')->with('success', 'Event updated successfully');
@@ -211,17 +218,17 @@ class EventController extends Controller
   //   return redirect()->route('admin.event.all')->with('success', 'Event deleted successfully');
   // }
   public function destroy($id)
-{
+  {
     $event = Event::findOrFail($id);
 
     if (!empty($event->file_path)) {
-        Storage::delete($event->file_path);
+      Storage::delete($event->file_path);
     }
 
     $event->delete();
 
     return redirect()->route('admin.event.all')->with('success', 'Event deleted successfully.');
-}
+  }
 
 
   public function categories()

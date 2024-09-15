@@ -11,183 +11,92 @@
         </div>
         {{-- search bar --}}
         <div class="container d-flex justify-content-center align-items-center mt-3">
-          <div class="search-container p-3 bg-light rounded shadow">
+          <form action="{{ route('home') }}" method="GET" class="search-container p-3 bg-light rounded shadow">
             <div class="d-flex align-items-center">
-              <select class="form-select me-2 select-category" aria-label="Select Category">
-                <option selected>Choose Category</option>
-                <option value="1">Category 1</option>
-                <option value="2">Category 2</option>
-                <option value="3">Category 3</option>
+              <select class="form-select me-2 select-category" name="category" aria-label="Select Category">
+                <option value="">Choose Category</option>
+                @foreach ($categories as $category)
+                  <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                    {{ $category->title }}
+                  </option>
+                @endforeach
               </select>
-              <input type="text" class="form-control me-2 search-input" placeholder="Search..." aria-label="Search">
-              <button class="btn btn-primary search-button">Search</button>
-            </div>
-          </div>
 
+              <input type="text" class="form-control me-2 search-input" name="search" placeholder="Search..."
+                value="{{ request('search') }}" aria-label="Search">
+
+              <button type="submit" class="btn btn-primary search-button">Search</button>
+            </div>
+          </form>
         </div>
         {{-- gallery filter --}}
-        <section class="gallery">
-          <div class="container">
-            <div class="row">
-              <div class="gallery-filter">
-                <span class="filter-item active" data-filter="all">All</span>
-                <span class="filter-item" data-filter="shoe">Wedding</span>
-                <span class="filter-item" data-filter="headphone">Business</span>
-                <span class="filter-item" data-filter="camera">Career</span>
+        <div>
+          <h2 class="text-center mt-5">Explore Our Events</h2>
+        </div>
+        <div class="container">
+          <div class="row">
+            @if ($events->isEmpty())
+              <!-- If there are no events, show this message -->
+              <div class="col-12">
+                <p class="text-center mt-5">No events available today or upcoming. Please check back later!</p>
               </div>
-            </div>
-            <div class="row">
-              <!-- gallery item start -->
-              <div class="gallery-item shoe">
-                <div class="gallery-item-inner">
-                  <img src="https://i.postimg.cc/7PJ4yYHh/revolt-164-6w-VEHf-I-unsplash.jpg" alt="shoe">
-                  <div>
-                    <small>admin</small>
-                    <h3>heading</h3>
-                    <p>paragraph of this and that those even are and these are those in this and these are thoser ins thse
-                      ar ehtos ein these.</p>
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-md-6 m-0 p-0 ">
-                          Wilton , United States
-                        </div>
-                        <div class="col-md-6 m-0 p-0 text-end">
-                          <span class="text-primary">$95</span>
-                        </div>
+            @else
+              <!-- Loop through events if available -->
+              @foreach ($events as $event)
+                <div class="col-md-4 d-flex flex-wrap mb-3">
+                  <div class="card h-100 w-100">
+                    <div class="card-header">
+                      <div style="height: 250px">
+                        <img class="w-100 h-100"
+                          src="{{ $event->image ? asset('storage/' . $event->image) : asset('images/default_image.png') }}"
+                          alt="{{ $event->title }}">
                       </div>
+                    </div>
+                    <div class="card-body">
+                      <h5 class="text-primary">
+                        By: {{ $event->organizer->first_name }}
+                      </h5>
+                      <h3>Event Title: {{ $event->title }}</h3>
+                      <p style="text-align: justify">
+                        <b>Description:</b> {{ Str::limit($event->description, 150) }}
+                      </p>
+                      <p style="text-align: justify">
+                        <b>Price:</b> {{ $event->price }}
+                      </p>
+                    </div>
+                    <div class="card-footer">
+                      @if ($event->id)
+                        {{-- <a href="{{ route('user.book', ['event' => $event->id]) }}" class="btn btn-primary">Book
+                          Event</a> --}}
+                        <a href="{{ route('user.book', ['event' => $event->id]) }}" class="btn btn-primary">Book
+                          Event</a>
+                      @else
+                        <span>No booking available</span>
+                      @endif
                     </div>
                   </div>
                 </div>
-              </div>
-              <!-- gallery item end -->
-              <!-- gallery item start -->
-              <div class="gallery-item headphone">
-                <div class="gallery-item-inner">
-                  <img src="https://i.postimg.cc/zf7MT4q9/istockphoto-1289318271-170667a.jpg" alt="headphone">
-                  <div>
-                    <small>admin</small>
-                    <h3>heading</h3>
-                    <p>paragraph of this and that those even are and these are those in this and these are thoser ins thse
-                      ar ehtos ein these.</p>
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-md-6 m-0 p-0 ">
-                          Wilton , United States
-                        </div>
-                        <div class="col-md-6 m-0 p-0 text-end">
-                          <span class="text-primary">$95</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- gallery item end -->
-              <!-- gallery item start -->
-              <div class="gallery-item camera">
-                <div class="gallery-item-inner">
-                  <img src="https://i.postimg.cc/vZ7QQdMP/nordwood-themes-F3-Dde-9thd8-unsplash.jpg" alt="camera">
-                  <div>
-                    <small>admin</small>
-                    <h3>heading</h3>
-                    <p>paragraph of this and that those even are and these are those in this and these are thoser ins thse
-                      ar ehtos ein these.</p>
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-md-6 m-0 p-0 ">
-                          Wilton , United States
-                        </div>
-                        <div class="col-md-6 m-0 p-0 text-end">
-                          <span class="text-primary">$95</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- gallery item end -->
-              <!-- gallery item start -->
-              <div class="gallery-item headphone">
-                <div class="gallery-item-inner">
-                  <img src="https://i.postimg.cc/3xTY15HR/c-d-x-PDX-a-82obo-unsplash.jpg" alt="headphone">
-                  <div>
-                    <small>admin</small>
-                    <h3>heading</h3>
-                    <p>paragraph of this and that those even are and these are those in this and these are thoser ins thse
-                      ar ehtos ein these.</p>
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-md-6 m-0 p-0 ">
-                          Wilton , United States
-                        </div>
-                        <div class="col-md-6 m-0 p-0 text-end">
-                          <span class="text-primary">$95</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- gallery item end -->
-              <!-- gallery item start -->
-              <div class="gallery-item camera">
-                <div class="gallery-item-inner">
-                  <img src="https://i.postimg.cc/PrYL89TD/patrick-dozk-Vh-Dyvh-Q-unsplash.jpg" alt="camera">
-                  <div>
-                    <small>admin</small>
-                    <h3>heading</h3>
-                    <p>paragraph of this and that those even are and these are those in this and these are thoser ins thse
-                      ar ehtos ein these.</p>
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-md-6 m-0 p-0 ">
-                          Wilton , United States
-                        </div>
-                        <div class="col-md-6 m-0 p-0 text-end">
-                          <span class="text-primary">$95</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- gallery item end -->
-              <!-- gallery item start -->
-              <div class="gallery-item headphone">
-                <div class="gallery-item-inner">
-                  <img src="https://i.postimg.cc/PqYyN2Nr/ervo-rocks-Zam8-Tv-Eg-N5o-unsplash.jpg" alt="headphone3">
-                  <div>
-                    <small>admin</small>
-                    <h3>heading</h3>
-                    <p>paragraph of this and that those even are and these are those in this and these are thoser ins thse
-                      ar ehtos ein these.</p>
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-md-6 m-0 p-0 ">
-                          Wilton , United States
-                        </div>
-                        <div class="col-md-6 m-0 p-0 text-end">
-                          <span class="text-primary">$95</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- gallery item end -->
-            </div>
+              @endforeach
+            @endif
           </div>
-        </section>
+        </div>
+
+
+
+
+
+
+
         {{--  --}}
       </div>
     </div>
-    {{-- Explore Categories --}}
+    {{-- resources/views/admin/category/index.blade.php --}}
     <div class="container my-5">
       <h3 class="my-5 text-center">Explore Categories</h3>
-      <div class="row d-flex flex-wrap">
+      <div class="row">
         @foreach ($categories as $category)
-          <div class="col  mb-4">
-            <div class="card h-100">
+          <div class="col mb-4">
+            <div class="d-flex flex-wrap card h-100">
               <div class="card-header">
                 @php
                   $imageUrl = $category->image ? asset('storage/categories/' . $category->image) : 'default-image-url';
@@ -202,66 +111,5 @@
         @endforeach
       </div>
     </div>
-    {{--  --}}
-
-    {{-- upcoming events --}}
-
-    {{-- Latest News --}}
-
-    <div class="container my-5">
-      <h2 class="fw-bold my-5 text-center">UPCOMING EVENTS</h2>
-      <div class="row card-header-style d-flex flex-wrap">
-        @foreach ($events as $event)
-          <div class="col-md-4 mb-4">
-            <a href="{{ route('events.show', $event->id) }}" class="text-decoration-none">
-              <div class="card h-100">
-                <div class="card-header">
-                  @php
-                    $imageUrl = $event->image
-                        ? asset('storage/events/' . $event->image)
-                        : asset('images/default-event.png');
-                  @endphp
-                  <img src="{{ $event->image ? asset('storage/' . $event->image) : 'default_image_path' }}"
-                    alt="{{ $event->title }}">
-
-                </div>
-
-                <div class="card-body">
-                  <h3>{{ $event->title }}</h3>
-                  <p>{{ $event->description }}</p>
-                </div>
-                <div class="card-footer d-flex justify-content-between">
-                  <p>{{ $event->location }}</p>
-                  <p>${{ number_format($event->price, 2) }}</p>
-                </div>
-              </div>
-            </a>
-          </div>
-        @endforeach
-      </div>
-    </div>
-    <script>
-      const filterContainer = document.querySelector(".gallery-filter"),
-        galleryItems = document.querySelectorAll(".gallery-item");
-
-      filterContainer.addEventListener("click", (event) => {
-        if (event.target.classList.contains("filter-item")) {
-          // deactivate existing active 'filter-item'
-          filterContainer.querySelector(".active").classList.remove("active");
-          // activate new 'filter-item'
-          event.target.classList.add("active");
-          const filterValue = event.target.getAttribute("data-filter");
-          galleryItems.forEach((item) => {
-            if (item.classList.contains(filterValue) || filterValue === 'all') {
-              item.classList.remove("hide");
-              item.classList.add("show");
-            } else {
-              item.classList.remove("show");
-              item.classList.add("hide");
-            }
-          });
-        }
-      });
-    </script>
 
   @endsection;
