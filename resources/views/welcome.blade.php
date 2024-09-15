@@ -56,7 +56,7 @@
                     <div class="card-header">
                       <div style="height: 250px">
                         <img class="w-100 h-100"
-                          src="{{ $event->image ? asset('storage/' . $event->image) : 'default_image_path' }}"
+                          src="{{ $event->image ? asset('storage/' . $event->image) : asset('images/default_image.png') }}"
                           alt="{{ $event->title }}">
                       </div>
                     </div>
@@ -72,10 +72,23 @@
                         <b>Price:</b> {{ $event->price }}
                       </p>
                     </div>
+                    <div class="card-footer">
+                      @if ($event->id)
+                        {{-- <a href="{{ route('user.book', ['event' => $event->id]) }}" class="btn btn-primary">Book
+                          Event</a> --}}
+                        <a href="{{ route('user.book', ['event' => $event->id]) }}" class="btn btn-primary">Book
+                          Event</a>
+                      @else
+                        <span>No booking available</span>
+                      @endif
+                    </div>
                   </div>
                 </div>
               @endforeach
             @endif
+            {{-- <div class="text-center">
+              <a class="btn btn-info " href="{{ route('user.booked.events') }}">My Booked Events</a>
+            </div> --}}
           </div>
         </div>
 

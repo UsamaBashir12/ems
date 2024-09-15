@@ -71,7 +71,7 @@
             <a class="nav-link" href="{{ route('events') }}">Events</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Services</a>
+            <a class="nav-link" href="#">Organizers</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Contact</a>
@@ -84,72 +84,69 @@
         <!-- Buttons on the right side -->
         <div class="d-flex">
           <!-- Customer button with dropdown -->
-          <div class="btn-group me-2">
-            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              @auth
-                <!-- Show the logged-in user's name -->
-                Logged In: {{ Auth::user()->first_name }} <!-- Adjust this if you want to display a specific field like first_name -->
-              @else
-                Customer
-              @endauth
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-              @auth
-                <!-- Display logout option for authenticated users -->
+          @if (Auth::check() && Auth::user()->role_id != 2)
+            <!-- Check if user is logged in and not an organizer -->
+            <div class="btn-group me-2">
+              <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Logged In: {{ Auth::user()->first_name }} <!-- Display user's name -->
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="{{ route('user.dashboard') }}">Dashboard</a></li>
                 <li><a class="dropdown-item" href="{{ route('logout') }}"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                   @csrf
                 </form>
-              @else
-                <!-- Display login and signup options for unauthenticated users -->
+              </ul>
+            </div>
+          @elseif (!Auth::check())
+            <!-- If no one is logged in -->
+            <div class="btn-group me-2">
+              <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Customer
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="{{ route('login') }}">Login</a></li>
                 <li><a class="dropdown-item" href="{{ route('register') }}">Signup</a></li>
-              @endauth
-            </ul>
-          </div>
+              </ul>
+            </div>
+          @endif
 
           <!-- Organizer button with dropdown -->
-          <div class="btn-group">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              @auth
-                <!-- Show the logged-in user's name if the user is an organizer -->
-                @if (Auth::user()->role_id == 2)
-                  <!-- Assuming '2' is the Organizer role -->
-                  {{ Auth::user()->name }} <!-- Adjust this if needed -->
-                @else
-                  Organizer
-                @endif
-              @else
+          @if (Auth::check() && Auth::user()->role_id == 2)
+            <!-- Check if user is logged in and is an organizer -->
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                {{ Auth::user()->first_name }} <!-- Display organizer's name -->
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{{ route('organizer.dashboard') }}">Dashboard</a></li>
+                <li><a class="dropdown-item" href="{{ route('logout') }}"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                  @csrf
+                </form>
+              </ul>
+            </div>
+          @elseif (!Auth::check())
+            <!-- If no one is logged in -->
+            <!-- Display the "Organizer" button only if no one is logged in -->
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                aria-expanded="false">
                 Organizer
-              @endauth
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-              @auth
-                @if (Auth::user()->role_id == 2)
-                  <!-- Display organizer-specific options for authenticated organizers -->
-                  <li><a class="dropdown-item" href="{{ route('organizer.dashboard') }}">Dashboard</a></li>
-                  <li><a class="dropdown-item" href="{{ route('logout') }}"
-                      onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
-                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                  </form>
-                @else
-                  <!-- Display login and signup options for unauthenticated users -->
-                  <li><a class="dropdown-item" href="{{ route('login') }}">Login</a></li>
-                  <li><a class="dropdown-item" href="{{ route('register') }}">Signup</a></li>
-                @endif
-              @else
-                <!-- Display login and signup options for unauthenticated users -->
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="{{ route('login') }}">Login</a></li>
                 <li><a class="dropdown-item" href="{{ route('register') }}">Signup</a></li>
-              @endauth
-            </ul>
-          </div>
+              </ul>
+            </div>
+          @endif
         </div>
+
         {{-- @if (Auth::check())
           <p>Logged in as: {{ Auth::user()->first_name }}</p>
         @else

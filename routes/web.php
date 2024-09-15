@@ -31,6 +31,10 @@ Route::get('/event-details', function () {
 Route::get('/events', function () {
   return view('events');
 })->name('events');
+
+// Organizers
+Route::get('/organizers', [OrganizerController::class, 'index'])->name('organizers.index');
+
 // =============================*** Admin Routes *** ==========================================
 Route::prefix('admin')->middleware(['auth', 'role:1', 'checkActive'])->group(function () {
   Route::get('/admin/events/add', [EventController::class, 'create'])->name('admin.event.add');
@@ -94,6 +98,7 @@ Route::prefix('user')->middleware(['auth', 'role:3', 'checkActive'])->group(func
 
   // Handle Booking Submission (POST)
   Route::post('/events/{event}/book', [UserSideController::class, 'book'])->name('events.book');
+  Route::get('/user/booked-events', [UserSideController::class, 'showBookedEvents'])->name('user.booked.events')->middleware('auth');
 });
 
 

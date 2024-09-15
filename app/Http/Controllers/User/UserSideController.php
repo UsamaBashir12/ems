@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Event;
 use App\Models\Booking;
@@ -30,12 +31,51 @@ class UserSideController extends Controller
 
     return view('user.dashboard', compact('events', 'categories', 'organizers'));
   }
-  // Show the booking form
   public function showBookingForm($eventId)
   {
     $event = Event::findOrFail($eventId);
-    return view('user.book', compact('event'));
+
+    // Get the total number of tickets booked for each type
+    $totalFreeTicketsBooked = Booking::where('event_id', $eventId)->sum('free_quantity');
+    $totalNormalTicketsBooked = Booking::where('event_id', $eventId)->sum('normal_quantity');
+    $totalAllTicketsBooked = Booking::where('event_id', $eventId)->sum('all_quantity');
+    $totalBusinessTicketsBooked = Booking::where('event_id', $eventId)->sum('business_quantity');
+    $totalFirstClassTicketsBooked = Booking::where('event_id', $eventId)->sum('first_quantity');
+
+    // Assuming the maximum limit of each ticket type is 5
+    $maxTickets = 5;
+
+    // Calculate remaining tickets for each type
+    $remainingFreeTickets = max($maxTickets - $totalFreeTicketsBooked, 0);
+    $remainingNormalTickets = max($maxTickets - $totalNormalTicketsBooked, 0);
+    $remainingAllTickets = max($maxTickets - $totalAllTicketsBooked, 0);
+    $remainingBusinessTickets = max($maxTickets - $totalBusinessTicketsBooked, 0);
+    $remainingFirstClassTickets = max($maxTickets - $totalFirstClassTicketsBooked, 0);
+
+    // Flags to check if ticket limits are reached
+    $freeTicketsLimitReached = $remainingFreeTickets <= 0;
+    $normalTicketsLimitReached = $remainingNormalTickets <= 0;
+    $allTicketsLimitReached = $remainingAllTickets <= 0;
+    $businessTicketsLimitReached = $remainingBusinessTickets <= 0;
+    $firstClassTicketsLimitReached = $remainingFirstClassTickets <= 0;
+
+    return view('user.book', compact(
+      'event',
+      'remainingFreeTickets',
+      'remainingNormalTickets',
+      'remainingAllTickets',
+      'remainingBusinessTickets',
+      'remainingFirstClassTickets',
+      'freeTicketsLimitReached',
+      'normalTicketsLimitReached',
+      'allTicketsLimitReached',
+      'businessTicketsLimitReached',
+      'firstClassTicketsLimitReached'
+    ));
   }
+
+
+
 
 
   public function book(Request $request, int $eventId)
@@ -61,6 +101,20 @@ class UserSideController extends Controller
       'first_quantity' => 200,
     ];
 
+    // Get the total number of tickets already booked for the event across all users
+    $totalTicketsBooked = Booking::where('event_id', $eventId)
+      ->sum(DB::raw('free_quantity + normal_quantity + all_quantity + business_quantity + first_quantity'));
+
+    // Calculate the total number of tickets requested in this booking
+    $totalRequestedTickets = $validated['free_quantity'] + $validated['normal_quantity'] +
+      $validated['all_quantity'] + $validated['business_quantity'] +
+      $validated['first_quantity'];
+
+    // Check if booking exceeds the limit of 5 tickets per event
+    if ($totalTicketsBooked + $totalRequestedTickets > 5) {
+      return redirect()->back()->with('error', 'Booking these tickets would exceed the limit of 5 tickets for this event.');
+    }
+
     // Calculate the total price
     $totalPrice = array_reduce(array_keys($validated), function ($carry, $key) use ($validated, $ticketPrices) {
       return $carry + ($validated[$key] * $ticketPrices[$key]);
@@ -81,10 +135,24 @@ class UserSideController extends Controller
     ]);
 
     // Redirect with a success message
-    return redirect()->route('user.dashboard', $event->id)->with('success', 'Tickets successfully booked!');
+    return redirect()->route('user.dashboard')->with('success', 'Tickets successfully booked!');
   }
 
 
+
+  public function showBookedEvents()
+  {
+    // Fetch the current user's booked events
+    $userId = auth()->id();
+
+    // Fetch the bookings along with event details
+    $bookedEvents = Booking::with('event')
+      ->where('user_id', $userId)
+      ->get();
+
+    // Pass the bookings to the view
+    return view('user.booked-events', compact('bookedEvents'));
+  }
 
 
 

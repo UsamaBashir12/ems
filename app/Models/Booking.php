@@ -20,4 +20,8 @@ class Booking extends Model
     'first_quantity',
     'total_price',
   ];
+  public function event()
+  {
+    return $this->belongsTo(Event::class);
+  }
 }
