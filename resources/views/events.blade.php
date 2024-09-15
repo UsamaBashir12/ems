@@ -82,21 +82,6 @@
               </select>
             </div>
 
-            <!-- Event Type -->
-            {{-- <div class="mb-3">
-              <label class="form-label">Event Type</label>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="event_type" id="onlineEvent" value="online"
-                  {{ request('event_type') == 'online' ? 'checked' : '' }}>
-                <label class="form-check-label" for="onlineEvent">Online</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="event_type" id="offlineEvent" value="offline"
-                  {{ request('event_type') == 'offline' ? 'checked' : '' }}>
-                <label class="form-check-label" for="offlineEvent">Offline</label>
-              </div>
-            </div> --}}
-
             <!-- Price Filter -->
             <div class="mb-3">
               <label for="priceRange" class="form-label">Price Range ($)</label>
@@ -114,56 +99,33 @@
         <div class="col-md-9">
           <div class="row d-flex flex-wrap">
             @forelse ($events as $event)
-              <div>
-                <h2 class="text-center mt-5">Explore Our Events</h2>
-              </div>
-              <div class="container">
-                <div class="row">
-                  @if ($events->isEmpty())
-                    <!-- If there are no events, show this message -->
-                    <div class="col-12">
-                      <p class="text-center mt-5">No events available today or upcoming. Please check back later!</p>
+              <div class="col-md-4 d-flex flex-wrap mb-3">
+                <div class="card h-100 w-100">
+                  <div class="card-header">
+                    <div style="height: 250px">
+                      <img class="w-100 h-100"
+                        src="{{ $event->image ? asset('storage/' . $event->image) : asset('images/default_image.png') }}"
+                        alt="{{ $event->title }}">
                     </div>
-                  @else
-                    <!-- Loop through events if available -->
-                    @foreach ($events as $event)
-                      <div class="col-md-4 d-flex flex-wrap mb-3">
-                        <div class="card h-100 w-100">
-                          <div class="card-header">
-                            <div style="height: 250px">
-                              <img class="w-100 h-100"
-                                src="{{ $event->image ? asset('storage/' . $event->image) : asset('images/default_image.png') }}"
-                                alt="{{ $event->title }}">
-                            </div>
-                          </div>
-                          <div class="card-body">
-                            <h5 class="text-primary">
-                              By: {{ $event->organizer->first_name }}
-                            </h5>
-                            <h3>Event Title: {{ $event->title }}</h3>
-                            <p style="text-align: justify">
-                              <b>Description:</b> {{ Str::limit($event->description, 150) }}
-                            </p>
-                            <p style="text-align: justify">
-                              <b>Price:</b> {{ $event->price }}
-                            </p>
-                          </div>
-                          <div class="card-footer">
-                            @if ($event->id)
-                              {{-- <a href="{{ route('user.book', ['event' => $event->id]) }}" class="btn btn-primary">Book
-                              Event</a> --}}
-                              <a href="{{ route('user.book', ['event' => $event->id]) }}" class="btn btn-primary">Book
-                                Event</a>
-                            @else
-                              <span>No booking available</span>
-                            @endif
-                          </div>
-                        </div>
-                      </div>
-                    @endforeach
-                  @endif
-                  <div class="text-center">
-                    <a class="btn btn-info " href="{{ route('user.booked.events') }}">My Booked Events</a>
+                  </div>
+                  <div class="card-body">
+                    <h5 class="text-primary">
+                      By: {{ $event->organizer->first_name }}
+                    </h5>
+                    <h3>Event Title: {{ $event->title }}</h3>
+                    <p style="text-align: justify">
+                      <b>Description:</b> {{ Str::limit($event->description, 150) }}
+                    </p>
+                    <p style="text-align: justify">
+                      <b>Price:</b> {{ $event->price }}
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                    @if ($event->id)
+                      <a href="{{ route('user.book', ['event' => $event->id]) }}" class="btn btn-primary">Book Event</a>
+                    @else
+                      <span>No booking available</span>
+                    @endif
                   </div>
                 </div>
               </div>
@@ -180,7 +142,6 @@
             {{ $events->appends(request()->query())->links() }}
           </div>
         </div>
-
       </div>
     </div>
   </div>

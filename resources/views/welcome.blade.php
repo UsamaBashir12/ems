@@ -89,7 +89,7 @@
       <h3 class="my-5 text-center">Explore Categories</h3>
       <div class="row">
         @foreach ($categories as $category)
-          <div class="col mb-4">
+          <div class="col-md-4 mb-4">
             <div class="d-flex flex-wrap card h-100">
               <div class="card-header">
                 @php
