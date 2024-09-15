@@ -71,10 +71,10 @@
             <a class="nav-link" href="{{ route('events') }}">Events</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Organizers</a>
+            <a class="nav-link" href="{{ route('organizer')}}">Organizers</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
+            <a class="nav-link" href="{{ route('contact') }}">Contact</a>
           </li>
         </ul>
         <style>

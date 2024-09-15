@@ -2,9 +2,7 @@
 <style>
   .select-category {
     color: black;
-    /* Ensures text color is black */
     background-color: white;
-    /* Ensures background is white */
   }
 </style>
 @section('title', 'HOME PAGE')
@@ -28,15 +26,12 @@
                   </option>
                 @endforeach
               </select>
-
               <input type="text" class="form-control me-2 search-input" name="search" placeholder="Search..."
                 value="{{ request('search') }}" aria-label="Search">
-
               <button type="submit" class="btn btn-primary search-button">Search</button>
             </div>
           </form>
         </div>
-
         {{-- gallery filter --}}
         <div>
           <h2 class="text-center mt-5">Explore Our Events</h2>
@@ -74,8 +69,6 @@
                     </div>
                     <div class="card-footer">
                       @if ($event->id)
-                        {{-- <a href="{{ route('user.book', ['event' => $event->id]) }}" class="btn btn-primary">Book
-                          Event</a> --}}
                         <a href="{{ route('user.book', ['event' => $event->id]) }}" class="btn btn-primary">Book
                           Event</a>
                       @else
@@ -86,14 +79,8 @@
                 </div>
               @endforeach
             @endif
-            {{-- <div class="text-center">
-              <a class="btn btn-info " href="{{ route('user.booked.events') }}">My Booked Events</a>
-            </div> --}}
           </div>
         </div>
-
-
-
         {{--  --}}
       </div>
     </div>
