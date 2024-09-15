@@ -78,6 +78,9 @@
                 </div>
               @endforeach
             @endif
+            <div class="text-center">
+              <a class="btn btn-info " href="{{ route('user.booked.events') }}">My Booked Events</a>
+            </div>
           </div>
         </div>
 

@@ -114,37 +114,58 @@
         <div class="col-md-9">
           <div class="row d-flex flex-wrap">
             @forelse ($events as $event)
-              <div class="col-md-4 mb-4 h-100 d-flex flex-wrap">
-                <a href="{{ route('events.show', $event->id) }}" class="text-decoration-none">
-                  <div class="card h-100">
-                    <div class="card-header p-0">
-                      @php
-                        // Use default event image if no image is provided
-                        $imageUrl = $event->image
-                            ? asset('storage/events/' . $event->image)
-                            : asset('images/default-event.png');
-                      @endphp
-                      <div style="height: 250px;">
-                        <img src="{{ $imageUrl }}" alt="{{ $event->title }}"
-                          class="h-100 w-100 img-fluid card-img-top">
+              <div>
+                <h2 class="text-center mt-5">Explore Our Events</h2>
+              </div>
+              <div class="container">
+                <div class="row">
+                  @if ($events->isEmpty())
+                    <!-- If there are no events, show this message -->
+                    <div class="col-12">
+                      <p class="text-center mt-5">No events available today or upcoming. Please check back later!</p>
+                    </div>
+                  @else
+                    <!-- Loop through events if available -->
+                    @foreach ($events as $event)
+                      <div class="col-md-4 d-flex flex-wrap mb-3">
+                        <div class="card h-100 w-100">
+                          <div class="card-header">
+                            <div style="height: 250px">
+                              <img class="w-100 h-100"
+                                src="{{ $event->image ? asset('storage/' . $event->image) : asset('images/default_image.png') }}"
+                                alt="{{ $event->title }}">
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <h5 class="text-primary">
+                              By: {{ $event->organizer->first_name }}
+                            </h5>
+                            <h3>Event Title: {{ $event->title }}</h3>
+                            <p style="text-align: justify">
+                              <b>Description:</b> {{ Str::limit($event->description, 150) }}
+                            </p>
+                            <p style="text-align: justify">
+                              <b>Price:</b> {{ $event->price }}
+                            </p>
+                          </div>
+                          <div class="card-footer">
+                            @if ($event->id)
+                              {{-- <a href="{{ route('user.book', ['event' => $event->id]) }}" class="btn btn-primary">Book
+                              Event</a> --}}
+                              <a href="{{ route('user.book', ['event' => $event->id]) }}" class="btn btn-primary">Book
+                                Event</a>
+                            @else
+                              <span>No booking available</span>
+                            @endif
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div class="card-body">
-                      <p class="text-primary fs-5 fw-bold">
-                        By: {{ $event->organizer->first_name }}
-                      </p>
-                      <h5 class="card-title">{{ $event->title }}</h5>
-                      <p class="card-text">{{ Str::limit($event->description, 100) }}</p>
-                    </div>
-                    <div class="card-footer">
-                      <p><b>Price:</b> ${{ number_format($event->price, 2) }}</p>
-                      <div class="d-flex justify-content-between">
-                        <p class="mb-0">{{ \Carbon\Carbon::parse($event->start_date)->format('M d, Y') }}</p>
-                        <p class="mb-0">{{ \Carbon\Carbon::parse($event->end_date)->format('M d, Y') }}</p>
-                      </div>
-                    </div>
+                    @endforeach
+                  @endif
+                  <div class="text-center">
+                    <a class="btn btn-info " href="{{ route('user.booked.events') }}">My Booked Events</a>
                   </div>
-                </a>
+                </div>
               </div>
             @empty
               <!-- If there are no events available today or upcoming, show this message -->

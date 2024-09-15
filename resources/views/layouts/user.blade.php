@@ -27,7 +27,7 @@
     </main>
 
     <footer>
-        <p>&copy; {{ date('Y') }} Your Company. All rights reserved.</p>
+        {{-- <p>&copy; {{ date('Y') }} Your Company. All rights reserved.</p> --}}
     </footer>
     
     <script src="{{ asset('js/app.js') }}"></script>
