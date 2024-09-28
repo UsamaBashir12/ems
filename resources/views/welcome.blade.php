@@ -189,6 +189,8 @@
           </div>
         @endforelse
       </div>
+      <a href="{{ route('user.booked.events') }}" class="btn btn-primary">View Booked Events</a>
+
     </div>
 
     {{-- Categories Section --}}

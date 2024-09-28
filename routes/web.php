@@ -15,6 +15,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Organizer\NewController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PayController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -29,8 +30,18 @@ Route::get('/event-details', function () {
   return view('eventDetails');
 })->name('eventDetails');
 
+
+Route::post('/events/book/{event}/pay', [PayController::class, 'pay'])->name('events.book.pay');
+Route::get('/events/book/{event}/success', [PayController::class, 'success'])->name('events.book.success');
+Route::get('/events/book/{event}/cancel', [PayController::class, 'cancel'])->name('events.book.cancel');
+
+
+
 Route::get('/events/{event}', [UserSideController::class, 'showEventDetails'])->name('event.details');
 
+Route::get('/events/{event}', [UserSideController::class, 'showEventDetails'])->name('event.details');
+
+Route::post('/events/{event}/book', [UserSideController::class, 'book'])->name('events.book');
 
 // Event page
 Route::get('/events', function () {
@@ -112,6 +123,7 @@ Route::prefix('user')->middleware(['auth', 'role:3', 'checkActive'])->group(func
   Route::get('/user/booked-events', [UserSideController::class, 'showBookedEvents'])->name('user.booked.events')->middleware('auth');
 });
 
+Route::post('/events/{event}/book', [EventController::class, 'book'])->name('events.book');
 
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login.store');

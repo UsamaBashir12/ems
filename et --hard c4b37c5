@@ -1,0 +1,43 @@
+[33md8c30f8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32muser-dashboard[m[33m, [m[1;31morigin/user-dashboard[m[33m)[m HEAD@{0}: commit: new changes
+[33mc4b37c5[m HEAD@{1}: commit: little changes inside userDashboard, home page and fix eventDetails page error fixing and add logo that is missing from header
+[33m621fa87[m HEAD@{2}: commit: necessary changes like design overall and countdown timer and also prices
+[33mc64a398[m HEAD@{3}: commit: new changes
+[33mb4c6d0e[m HEAD@{4}: checkout: moving from development to user-dashboard
+[33m49387c7[m[33m ([m[1;32mdevelopment[m[33m)[m HEAD@{5}: pull origin development: Fast-forward
+[33m29e4e0d[m HEAD@{6}: checkout: moving from user-dashboard to development
+[33mb4c6d0e[m HEAD@{7}: commit: home controller contact view events view user book view and also welcome view
+[33maa05c5c[m HEAD@{8}: commit: events page issue solved
+[33m0023400[m HEAD@{9}: commit: total organizer at main, contact page with backend
+[33m4f59ace[m HEAD@{10}: commit: web, main, users dashboard events
+[33me8b96a5[m HEAD@{11}: checkout: moving from development to user-dashboard
+[33m29e4e0d[m HEAD@{12}: checkout: moving from production to development
+[33m051f211[m[33m ([m[1;31morigin/production[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mproduction[m[33m, [m[1;32mmain[m[33m)[m HEAD@{13}: checkout: moving from development to production
+[33m29e4e0d[m HEAD@{14}: pull: Fast-forward
+[33mb9cc968[m HEAD@{15}: checkout: moving from user-dashboard to development
+[33me8b96a5[m HEAD@{16}: commit: user or main page
+[33m33e674b[m HEAD@{17}: checkout: moving from user-dashboard to user-dashboard
+[33m33e674b[m HEAD@{18}: commit: updated user daashboarding
+[33ma6c907e[m HEAD@{19}: commit: updated user daashboard
+[33mb9cc968[m HEAD@{20}: checkout: moving from development to user-dashboard
+[33mb9cc968[m HEAD@{21}: commit: admin contoller routes user page
+[33mc300c4d[m HEAD@{22}: commit: organizers field
+[33m051f211[m[33m ([m[1;31morigin/production[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mproduction[m[33m, [m[1;32mmain[m[33m)[m HEAD@{23}: checkout: moving from production to development
+[33m051f211[m[33m ([m[1;31morigin/production[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mproduction[m[33m, [m[1;32mmain[m[33m)[m HEAD@{24}: checkout: moving from main to production
+[33m051f211[m[33m ([m[1;31morigin/production[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mproduction[m[33m, [m[1;32mmain[m[33m)[m HEAD@{25}: reset: moving to 051f211
+[33m051f211[m[33m ([m[1;31morigin/production[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mproduction[m[33m, [m[1;32mmain[m[33m)[m HEAD@{26}: rebase (abort): returning to refs/heads/main
+[33m051f211[m[33m ([m[1;31morigin/production[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mproduction[m[33m, [m[1;32mmain[m[33m)[m HEAD@{27}: reset: moving to 051f211
+[33mb51368c[m HEAD@{28}: pull origin main --rebase (start): checkout b51368caf330d60af8bec5fe4bfafd23642370b3
+[33m051f211[m[33m ([m[1;31morigin/production[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mproduction[m[33m, [m[1;32mmain[m[33m)[m HEAD@{29}: commit: production
+[33me46d787[m HEAD@{30}: commit: neww
+[33mff8e9ee[m HEAD@{31}: commit: newsss
+[33m490f94e[m HEAD@{32}: commit: new
+[33m06b1d11[m HEAD@{33}: Branch: renamed refs/heads/main to refs/heads/main
+[33m06b1d11[m HEAD@{35}: Branch: renamed refs/heads/main to refs/heads/main
+[33m06b1d11[m HEAD@{37}: Branch: renamed refs/heads/main to refs/heads/main
+[33m06b1d11[m HEAD@{39}: Branch: renamed refs/heads/main to refs/heads/main
+[33m06b1d11[m HEAD@{41}: commit: first commit
+[33m79cd0f5[m HEAD@{42}: Branch: renamed refs/heads/main to refs/heads/main
+[33m79cd0f5[m HEAD@{44}: commit: first commit
+[33meb72961[m HEAD@{45}: commit: add
+[33m471c8eb[m HEAD@{46}: Branch: renamed refs/heads/master to refs/heads/main
+[33m471c8eb[m HEAD@{48}: commit (initial): first commit

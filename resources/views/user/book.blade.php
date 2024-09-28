@@ -19,8 +19,7 @@
 
     <div class="card shadow-lg border-light custom-card">
       <div class="card-body">
-        <form id="bookingForm" action="{{ route('events.book', ['event' => $event->id]) }}" method="POST"
-          onsubmit="return validateForm()">
+        <form  id="bookingForm" action="{{ route('events.book.pay', ['event' => $event->id]) }}" method="POST" onsubmit="return validateForm()">
           @csrf
 
           <!-- Error Message Container -->

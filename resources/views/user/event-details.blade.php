@@ -44,21 +44,19 @@
       </div>
     </div>
 
-    <!-- Booking List -->
-    <div class="mb-4">
-      @if ($bookings->count())
-        <h3 class="section-title">Bookings</h3>
-        <ul class="list-group booking-list">
-          @foreach ($bookings as $booking)
-            <li class="list-group-item">
-              {{ $booking->user->name }}: ${{ number_format($booking->total_price, 2) }}
-            </li>
-          @endforeach
-        </ul>
-      @else
-        <p>No bookings yet.</p>
-      @endif
-    </div>
+    @if ($bookings->count())
+      <h3 class="section-title">Bookings</h3>
+      <ul class="list-group booking-list">
+        @foreach ($bookings as $booking)
+          <li class="list-group-item">
+            {{ $booking->user ? $booking->user->name : 'Unknown User' }}: ${{ number_format($booking->total_price, 2) }}
+          </li>
+        @endforeach
+      </ul>
+    @else
+      <p>No bookings yet.</p>
+    @endif
+
 
     <!-- Booking Button -->
     <div>
