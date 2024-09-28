@@ -35,7 +35,11 @@ class Event extends Model
   {
     return $this->belongsTo(User::class, 'organizer_id');
   }
-
+    // Define the relationship with the Booking model
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
   public function category()
   {
     return $this->belongsTo(Category::class, 'category_id');
